@@ -1,0 +1,31 @@
+Package: MRMCbinary
+Version: 0.0.0.9000
+Title: MRMCbinary: Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study
+Description: R package \bold{MRMCbinary} is a package aimed at analyzing the performance of diagnostic tests for binary outcome.
+License: MIT + file LICENSE
+URL: https://github.com/seungjae2525/MRMCbinary
+BugReports: https://github.com/seungjae2525/MRMCbinary/issues
+Depends: R (>= 4.0.0)
+Imports: 
+    DescTools,
+    stats,
+    survival
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+LazyData: true
+NeedsCompilation: no
+Authors@R: 
+  c(person(given = "Seungjae",
+           family = "Lee",
+           role = c("aut", "cre"),
+           email = "seungjae2525@gmail.com",
+           comment = c(ORCID = "0000-0001-5508-8634")),
+    person(given = "Woojoo",
+           family = "Lee",
+           role = "aut",
+           comment = c(ORCID = "0000-0001-7447-7045")))
+Packaged: 2024-10-17 04:33:43 UTC; seung
+Author: Seungjae Lee [aut, cre] (<https://orcid.org/0000-0001-5508-8634>),
+    Woojoo Lee [aut] (<https://orcid.org/0000-0001-7447-7045>)
+Maintainer: Seungjae Lee <seungjae2525@gmail.com>
