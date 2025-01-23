@@ -6,7 +6,6 @@
 [![minimal R version](https://img.shields.io/badge/R-v4.2.0+-blue.svg)](https://cran.r-project.org/)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![R-CMD-check](https://github.com/seungjae2525/MRMCbinary/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/seungjae2525/MRMCbinary/actions/workflows/R-CMD-check.yaml)
-[![Codecov test coverage](https://codecov.io/gh/seungjae2525/MRMCbinary/graph/badge.svg)](https://app.codecov.io/gh/seungjae2525/MRMCbinary)
 <!-- badges: end -->
 
 # Multi-Reader Multi-Case Analysis of Binary Diagnostic Tests
