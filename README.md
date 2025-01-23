@@ -15,7 +15,7 @@ This is the source code for the `MRMCbinary` package in R.
 `MRMCbinary` is a package aimed at analyzing the performance of diagnostic tests for binary outcome.
  
 ### Reference
-Lee, S., Jang, S., and Lee, W. Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study. *submitted*.
+Lee, S., Jang, S., and Lee, W. Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study.
 
 ## Installation
 ### Current GitHub release:
