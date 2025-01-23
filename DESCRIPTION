@@ -1,6 +1,6 @@
 Package: MRMCbinary
 Title: Multi-Reader Multi-Case Analysis of Binary Diagnostic Tests
-Version: 1.0.1
+Version: 1.0.2
 Description: R package MRMCbinary is a package aimed at comparing the performance of diagnostic tests (i.e., sensitivity and specificity) for binary outcome in multi-reader multi-case (MRMC) study.
 License: MIT + file LICENSE
 URL: https://github.com/seungjae2525/MRMCbinary

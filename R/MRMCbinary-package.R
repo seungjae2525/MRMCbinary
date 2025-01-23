@@ -8,7 +8,7 @@
 #' @author Seungjae Lee \email{seungjae2525@@gmail.com} and Woojoo Lee \email{lwj221@@gmail.com}
 #'
 #' @references
-#' Lee, S., Jang, S., and Lee, W. Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study.
+#' Lee, S., Jang, S., and Lee, W. (2025). Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study.
 #'
 #' @keywords package
 #'
