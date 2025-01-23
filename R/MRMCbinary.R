@@ -191,9 +191,9 @@ MRMCbinary <- function(data, Reader, Modality, Case, D, Y, effect,
 
   ##
   if (effect == "Modality") {
-    CLR_result_sen <- survival::clogit(formula = Y ~ Modality + survival::strata(Case, Reader),
+    CLR_result_sen <- survival::clogit(formula = Y ~ Modality + strata(Case, Reader),
                                        data = data_sen_clr)
-    CLR_result_spe <- survival::clogit(formula = Y ~ Modality + survival::strata(Case, Reader),
+    CLR_result_spe <- survival::clogit(formula = Y ~ Modality + strata(Case, Reader),
                                        data = data_spe_clr)
     if (length(Modalities) == 2) {
       Q_MN_result_sen <- stats::mcnemar.test(x = table(data_sen_q[, -c(1,2)]), correct = FALSE)
@@ -210,9 +210,9 @@ MRMCbinary <- function(data, Reader, Modality, Case, D, Y, effect,
     Final_result$formula <- as.character(CLR_result_spe$userCall)[2]
 
   } else if (effect == "Reader") {
-    CLR_result_sen <- survival::clogit(formula = Y ~ Reader + survival::strata(Case, Modality),
+    CLR_result_sen <- survival::clogit(formula = Y ~ Reader + strata(Case, Modality),
                                        data = data_sen_clr)
-    CLR_result_spe <- survival::clogit(formula = Y ~ Reader + survival::strata(Case, Modality),
+    CLR_result_spe <- survival::clogit(formula = Y ~ Reader + strata(Case, Modality),
                                        data = data_spe_clr)
     if (length(Readers) == 2) {
       Q_MN_result_sen <- stats::mcnemar.test(x = table(data_sen_q[, -c(1,2)]), correct = FALSE)
@@ -230,9 +230,9 @@ MRMCbinary <- function(data, Reader, Modality, Case, D, Y, effect,
 
   } else if (effect == "Both") {
     if (interaction == TRUE) {
-      CLR_result_sen <- survival::clogit(formula = Y ~ Modality * Reader + survival::strata(Case),
+      CLR_result_sen <- survival::clogit(formula = Y ~ Modality * Reader + strata(Case),
                                          data = data_sen_clr)
-      CLR_result_spe <- survival::clogit(formula = Y ~ Modality * Reader + survival::strata(Case),
+      CLR_result_spe <- survival::clogit(formula = Y ~ Modality * Reader + strata(Case),
                                          data = data_spe_clr)
 
       Q_MN_result_sen <- DescTools::CochranQTest(y = as.matrix(data_sen_q[, -c(1)]))
@@ -245,9 +245,9 @@ MRMCbinary <- function(data, Reader, Modality, Case, D, Y, effect,
 
       Final_result$formula <- as.character(CLR_result_spe$userCall)[2]
     } else {
-      CLR_result_sen <- survival::clogit(formula = Y ~ Modality + Reader + survival::strata(Case),
+      CLR_result_sen <- survival::clogit(formula = Y ~ Modality + Reader + strata(Case),
                                          data = data_sen_clr)
-      CLR_result_spe <- survival::clogit(formula = Y ~ Modality + Reader + survival::strata(Case),
+      CLR_result_spe <- survival::clogit(formula = Y ~ Modality + Reader + strata(Case),
                                          data = data_spe_clr)
 
       ##
