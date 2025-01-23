@@ -6,7 +6,8 @@
 #' @param digits Summary digits. Default: max(1L, getOption("digits") - 3L).
 #' @param ... Further arguments (currently not used).
 #'
-#' @details Summary the results for object (\code{MRMCbinary} of class \code{MRMCbinary}.
+#' @details Summary the results for object of class \code{MRMCbinary}.
+#' In the conditional logistic regression results, the odds ratio, confidence interval of the odds ratio, and P value are reported.
 #'
 #' @examples
 #' ## Load example data
@@ -15,10 +16,10 @@
 #' ## Return the first parts of an object
 #' head(VanDyke)
 #'
-#' ## Extract Unique readers
+#' ## See unique readers
 #' unique(VanDyke$reader)
 #'
-#' ## Extract unique modalities
+#' ## See unique modalities
 #' unique(VanDyke$treatment)
 #'
 #' ## Create binary test results (Y_ijk)
@@ -88,9 +89,9 @@ summary.MRMCbinary <- function(object, digits = max(1L, getOption("digits") - 3L
     mat_CLR_sen <- data.frame(format_f(xx = temp_CLR_sen$Estimate,
                                        numer = NULL, denom = NULL,
                                        percentage = FALSE, digits=digits),
-                              format_f(xx = temp_CLR_sen$SE,
-                                       numer = NULL, denom = NULL,
-                                       percentage = FALSE, digits=digits),
+                              # format_f(xx = temp_CLR_sen$SE,
+                              #          numer = NULL, denom = NULL,
+                              #          percentage = FALSE, digits=digits),
                               paste0("[", format_f(xx = temp_CLR_sen$Lower.ci,
                                                    numer = NULL, denom = NULL,
                                                    percentage = FALSE, digits=digits),
@@ -98,7 +99,7 @@ summary.MRMCbinary <- function(object, digits = max(1L, getOption("digits") - 3L
                                                     numer = NULL, denom = NULL,
                                                     percentage = FALSE, digits=digits), "]"),
                               temp_CLR_sen_p)
-    colnames(mat_CLR_sen) <- c("Odds ratio", "Standard error", "Confidence interval", "P value")
+    colnames(mat_CLR_sen) <- c("Odds ratio", "Confidence interval", "P value") # "Standard error"
     rownames(mat_CLR_sen) <- paste0(c(rep(paste0("Modality", x$reference.Modality), x$n.modality-1),
                                       rep(paste0("Reader", x$reference.Reader), x$n.reader-1)),
                                     " vs ", rownames(temp_CLR_sen))
@@ -125,19 +126,7 @@ summary.MRMCbinary <- function(object, digits = max(1L, getOption("digits") - 3L
 
     if (x$interaction == TRUE) {
 
-      if (x$effect == "Modality") {
-        if (x$n.modality == 2) {
-          cat("McNemar's test: \n")
-        } else {
-          cat("Cochran's Q test: \n")
-        }
-      } else if (x$effect == "Reader") {
-        if (x$n.reader == 2) {
-          cat("McNemar's test: \n")
-        } else {
-          cat("Cochran's Q test: \n")
-        }
-      }
+      cat("Cochran's Q test: \n")
 
       temp_Q_MN_sen <- round(x$Q_MN_sen, digits=digits)
       temp_Q_MN_sen_p <- format_f(xx = temp_Q_MN_sen$P.value,
@@ -152,11 +141,12 @@ summary.MRMCbinary <- function(object, digits = max(1L, getOption("digits") - 3L
                                  temp_Q_MN_sen$DF,
                                  temp_Q_MN_sen_p)
       colnames(mat_Q_MN_sen) <- c("Statistic", "Degree of freedom", "P value")
-      rownames(mat_Q_MN_sen) <- c("Q")
+      rownames(mat_Q_MN_sen) <- c("")
       base::print(mat_Q_MN_sen)
-      cat("\n\n")
+      cat("\n")
 
     }
+    cat("\n")
 
     ##########################################################################
     ## Specificity with interaction term between modality and reader
@@ -173,9 +163,9 @@ summary.MRMCbinary <- function(object, digits = max(1L, getOption("digits") - 3L
     mat_CLR_spe <- data.frame(format_f(xx = temp_CLR_spe$Estimate,
                                        numer = NULL, denom = NULL,
                                        percentage = FALSE, digits=digits),
-                              format_f(xx = temp_CLR_spe$SE,
-                                       numer = NULL, denom = NULL,
-                                       percentage = FALSE, digits=digits),
+                              # format_f(xx = temp_CLR_spe$SE,
+                              #          numer = NULL, denom = NULL,
+                              #          percentage = FALSE, digits=digits),
                               paste0("[", format_f(xx = temp_CLR_spe$Lower.ci,
                                                    numer = NULL, denom = NULL,
                                                    percentage = FALSE, digits=digits),
@@ -183,7 +173,7 @@ summary.MRMCbinary <- function(object, digits = max(1L, getOption("digits") - 3L
                                                     numer = NULL, denom = NULL,
                                                     percentage = FALSE, digits=digits), "]"),
                               temp_CLR_spe_p)
-    colnames(mat_CLR_spe) <- c("Odds ratio", "Standard error", "Confidence interval", "P value")
+    colnames(mat_CLR_spe) <- c("Odds ratio", "Confidence interval", "P value") # "Standard error"
     rownames(mat_CLR_spe) <- paste0(c(rep(paste0("Modality", x$reference.Modality), x$n.modality-1),
                                       rep(paste0("Reader", x$reference.Reader), x$n.reader-1)),
                                     " vs ", rownames(temp_CLR_spe))
@@ -209,19 +199,7 @@ summary.MRMCbinary <- function(object, digits = max(1L, getOption("digits") - 3L
     cat("\n")
 
     if (x$interaction == TRUE) {
-      if (x$effect == "Modality") {
-        if (x$n.modality == 2) {
-          cat("McNemar's test: \n")
-        } else {
-          cat("Cochran's Q test: \n")
-        }
-      } else if (x$effect == "Reader") {
-        if (x$n.reader == 2) {
-          cat("McNemar's test: \n")
-        } else {
-          cat("Cochran's Q test: \n")
-        }
-      }
+      cat("Cochran's Q test: \n")
 
       temp_Q_MN_spe <- round(x$Q_MN_spe, digits=digits)
       temp_Q_MN_spe_p <- format_f(xx = temp_Q_MN_spe$P.value,
@@ -236,11 +214,10 @@ summary.MRMCbinary <- function(object, digits = max(1L, getOption("digits") - 3L
                                  temp_Q_MN_spe$DF,
                                  temp_Q_MN_spe_p)
       colnames(mat_Q_MN_spe) <- c("Statistic", "Degree of freedom", "P value")
-      rownames(mat_Q_MN_spe) <- c("Q")
+      rownames(mat_Q_MN_spe) <- c("")
       base::print(mat_Q_MN_spe)
       cat("\n")
     }
-
 
   } else {
     ##########################################################################
@@ -258,9 +235,9 @@ summary.MRMCbinary <- function(object, digits = max(1L, getOption("digits") - 3L
     mat_CLR_sen <- data.frame(format_f(xx = temp_CLR_sen$Estimate,
                                        numer = NULL, denom = NULL,
                                        percentage = FALSE, digits=digits),
-                              format_f(xx = temp_CLR_sen$SE,
-                                       numer = NULL, denom = NULL,
-                                       percentage = FALSE, digits=digits),
+                              # format_f(xx = temp_CLR_sen$SE,
+                              #          numer = NULL, denom = NULL,
+                              #          percentage = FALSE, digits=digits),
                               paste0("[", format_f(xx = temp_CLR_sen$Lower.ci,
                                                    numer = NULL, denom = NULL,
                                                    percentage = FALSE, digits=digits),
@@ -268,7 +245,7 @@ summary.MRMCbinary <- function(object, digits = max(1L, getOption("digits") - 3L
                                                     numer = NULL, denom = NULL,
                                                     percentage = FALSE, digits=digits), "]"),
                               temp_CLR_sen_p)
-    colnames(mat_CLR_sen) <- c("Odds ratio", "Standard error", "Confidence interval", "P value")
+    colnames(mat_CLR_sen) <- c("Odds ratio", "Confidence interval", "P value") # "Standard error"
     if (x$effect == "Modality") {
       rownames(mat_CLR_sen) <- paste0(rep(paste0("Modality", x$reference.Modality), x$n.modality-1),
                                       " vs ", rownames(temp_CLR_sen))
@@ -325,7 +302,7 @@ summary.MRMCbinary <- function(object, digits = max(1L, getOption("digits") - 3L
                                temp_Q_MN_sen$DF,
                                temp_Q_MN_sen_p)
     colnames(mat_Q_MN_sen) <- c("Statistic", "Degree of freedom", "P value")
-    rownames(mat_Q_MN_sen) <- c("Q")
+    rownames(mat_Q_MN_sen) <- c("")
     base::print(mat_Q_MN_sen)
     cat("\n\n")
 
@@ -344,9 +321,9 @@ summary.MRMCbinary <- function(object, digits = max(1L, getOption("digits") - 3L
     mat_CLR_spe <- data.frame(format_f(xx = temp_CLR_spe$Estimate,
                                        numer = NULL, denom = NULL,
                                        percentage = FALSE, digits=digits),
-                              format_f(xx = temp_CLR_spe$SE,
-                                       numer = NULL, denom = NULL,
-                                       percentage = FALSE, digits=digits),
+                              # format_f(xx = temp_CLR_spe$SE,
+                              #          numer = NULL, denom = NULL,
+                              #          percentage = FALSE, digits=digits),
                               paste0("[", format_f(xx = temp_CLR_spe$Lower.ci,
                                                    numer = NULL, denom = NULL,
                                                    percentage = FALSE, digits=digits),
@@ -354,7 +331,7 @@ summary.MRMCbinary <- function(object, digits = max(1L, getOption("digits") - 3L
                                                     numer = NULL, denom = NULL,
                                                     percentage = FALSE, digits=digits), "]"),
                               temp_CLR_spe_p)
-    colnames(mat_CLR_spe) <- c("Odds ratio", "Standard error", "Confidence interval", "P value")
+    colnames(mat_CLR_spe) <- c("Odds ratio", "Confidence interval", "P value") # "Standard error"
     if (x$effect == "Modality") {
       rownames(mat_CLR_spe) <- paste0(rep(paste0("Modality", x$reference.Modality), x$n.modality-1),
                                       " vs ", rownames(temp_CLR_spe))
@@ -411,7 +388,7 @@ summary.MRMCbinary <- function(object, digits = max(1L, getOption("digits") - 3L
                                temp_Q_MN_spe$DF,
                                temp_Q_MN_spe_p)
     colnames(mat_Q_MN_spe) <- c("Statistic", "Degree of freedom", "P value")
-    rownames(mat_Q_MN_spe) <- c("Q")
+    rownames(mat_Q_MN_spe) <- c("")
     base::print(mat_Q_MN_spe)
     cat("\n")
 

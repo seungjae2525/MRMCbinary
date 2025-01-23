@@ -5,7 +5,8 @@
 #' @param x An object for class \code{MRMCbinary}.
 #' @param ... Further arguments (currently not used).
 #'
-#' @details Print the results for object (\code{MRMCbinary} of class \code{MRMCbinary}.
+#' @details Print the results for object of class \code{MRMCbinary}).
+#' In the conditional logistic regression results, "Estimate" corresponds to the log odds ratio and "SE" corresponds to the standard error of the log odds ratio.
 #'
 #' @examples
 #' ## Load example data
@@ -14,10 +15,10 @@
 #' ## Return the first parts of an object
 #' head(VanDyke)
 #'
-#' ## Extract Unique readers
+#' ## See unique readers
 #' unique(VanDyke$reader)
 #'
-#' ## Extract unique modalities
+#' ## See unique modalities
 #' unique(VanDyke$treatment)
 #'
 #' ## Create binary test results (Y_ijk)
@@ -78,7 +79,8 @@ print.MRMCbinary <- function(x, ...) {
       cat("\"Sensitivity\" \n")
 
       cat("Conditional logistic regression results: \n")
-      base::print(x$CLR_sen)
+      x$CLR_sen$Estimate <- log (x$CLR_sen$Estimate)
+      base::print(x$CLR_sen[, c(1,2,5)])
       cat("\n")
 
       cat("Likelihood ratio test from conditional logistic regression: \n")
@@ -115,7 +117,8 @@ print.MRMCbinary <- function(x, ...) {
       cat("\"Specificity\" \n")
 
       cat("Conditional logistic regression results: \n")
-      base::print(x$CLR_spe)
+      x$CLR_spe$Estimate <- log (x$CLR_spe$Estimate)
+      base::print(x$CLR_spe[, c(1,2,5)])
       cat("\n")
 
       cat("Likelihood ratio test from conditional logistic regression: \n")
@@ -152,7 +155,8 @@ print.MRMCbinary <- function(x, ...) {
       cat("\"Sensitivity\" \n")
 
       cat("Conditional logistic regression results: \n")
-      base::print(x$CLR_sen)
+      x$CLR_sen$Estimate <- log (x$CLR_sen$Estimate)
+      base::print(x$CLR_sen[, c(1,2,5)])
       cat("\n")
 
       cat("Likelihood ratio test from conditional logistic regression: \n")
@@ -173,7 +177,8 @@ print.MRMCbinary <- function(x, ...) {
       cat("\"Specificity\" \n")
 
       cat("Conditional logistic regression results: \n")
-      base::print(x$CLR_spe)
+      x$CLR_spe$Estimate <- log (x$CLR_spe$Estimate)
+      base::print(x$CLR_spe[, c(1,2,5)])
       cat("\n")
 
       cat("Likelihood ratio test from conditional logistic regression: \n")
@@ -196,7 +201,8 @@ print.MRMCbinary <- function(x, ...) {
     cat("\"Sensitivity\" \n")
 
     cat("Conditional logistic regression results: \n")
-    base::print(x$CLR_sen)
+    x$CLR_sen$Estimate <- log (x$CLR_sen$Estimate)
+    base::print(x$CLR_sen[, c(1,2,5)])
     cat("\n")
 
     cat("Likelihood ratio test from conditional logistic regression: \n")
@@ -232,7 +238,8 @@ print.MRMCbinary <- function(x, ...) {
     cat("\"Specificity\" \n")
 
     cat("Conditional logistic regression results: \n")
-    base::print(x$CLR_spe)
+    x$CLR_spe$Estimate <- log (x$CLR_spe$Estimate)
+    base::print(x$CLR_spe[, c(1,2,5)])
     cat("\n")
 
     cat("Likelihood ratio test from conditional logistic regression: \n")

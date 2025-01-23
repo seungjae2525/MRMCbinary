@@ -15,7 +15,8 @@
 Print the results for object of class \code{MRMCbinary}.
 }
 \details{
-Print the results for object (\code{MRMCbinary} of class \code{MRMCbinary}.
+Print the results for object of class \code{MRMCbinary}).
+In the conditional logistic regression results, "Estimate" corresponds to the log odds ratio and "SE" corresponds to the standard error of the log odds ratio.
 }
 \examples{
 ## Load example data
@@ -24,10 +25,10 @@ data(VanDyke)
 ## Return the first parts of an object
 head(VanDyke)
 
-## Extract Unique readers
+## See unique readers
 unique(VanDyke$reader)
 
-## Extract unique modalities
+## See unique modalities
 unique(VanDyke$treatment)
 
 ## Create binary test results (Y_ijk)

@@ -17,7 +17,8 @@
 Summary the results for object of class \code{MRMCbinary}.
 }
 \details{
-Summary the results for object (\code{MRMCbinary} of class \code{MRMCbinary}.
+Summary the results for object of class \code{MRMCbinary}.
+In the conditional logistic regression results, the odds ratio, confidence interval of the odds ratio, and P value are reported.
 }
 \examples{
 ## Load example data
@@ -26,10 +27,10 @@ data(VanDyke)
 ## Return the first parts of an object
 head(VanDyke)
 
-## Extract Unique readers
+## See unique readers
 unique(VanDyke$reader)
 
-## Extract unique modalities
+## See unique modalities
 unique(VanDyke$treatment)
 
 ## Create binary test results (Y_ijk)
