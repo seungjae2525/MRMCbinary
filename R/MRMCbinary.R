@@ -252,7 +252,6 @@ MRMCbinary <- function(data, Reader, Modality, Case, D, Y, effect,
 
       ##
       Final_result <- result_mat(CLR_result_sen = CLR_result_sen, CLR_result_spe = CLR_result_spe,
-                                 Q_MN_result_sen = Q_MN_result_sen, Q_MN_result_spe = Q_MN_result_spe,
                                  effect = effect, interaction = interaction)
 
       Final_result$formula <- as.character(CLR_result_spe$userCall)[2]
