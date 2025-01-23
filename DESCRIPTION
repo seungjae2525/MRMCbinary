@@ -5,7 +5,7 @@ Description: R package \bold{MRMCbinary} is a package aimed at analyzing the per
 License: MIT + file LICENSE
 URL: https://github.com/seungjae2525/MRMCbinary
 BugReports: https://github.com/seungjae2525/MRMCbinary/issues
-Depends: R (>= 4.0.0)
+Depends: R (>= 4.2.0)
 Imports: 
     DescTools,
     stats,
