@@ -41,14 +41,14 @@ MRMCbinary(
 \value{
 An object of class \code{MRMCbinary}. The object is a data.frame with the following components:
 \item{CLR_sen}{Conditional logistic regression results for sensitivity.}
-\item{CLR_LRT_sen}{Likelihood ratio test of conditional logistic regression results for sensitivity.}
-\item{CLR_Score_sen}{Score test of conditional logistic regression results for sensitivity.}
-\item{CLR_Wald_sen}{Wald test of conditional logistic regression results for sensitivity.}
+\item{CLR_LRT_sen}{Likelihood ratio test from conditional logistic regression results for sensitivity.}
+\item{CLR_Score_sen}{Score test from conditional logistic regression results for sensitivity.}
+\item{CLR_Wald_sen}{Wald test from conditional logistic regression results for sensitivity.}
 \item{Q_MN_sen}{Cochran's Q test (when the number of modalities is greater than 2) or McNemar's test (when the number of modalities is equal to 2) result for sensitivity. This is only included if (1) effect = "Modality", (2) effect = "Reader", or (3) effect = "Both" and interaction = TRUE.}
 \item{CLR_spe}{Conditional logistic regression results for specificity.}
-\item{CLR_LRT_spe}{Likelihood ratio test of conditional logistic regression results for specificity.}
-\item{CLR_Score_spe}{Score test of conditional logistic regression results for specificity.}
-\item{CLR_Wald_spe}{Wald test of conditional logistic regression results for specificity.}
+\item{CLR_LRT_spe}{Likelihood ratio test from conditional logistic regression results for specificity.}
+\item{CLR_Score_spe}{Score test from conditional logistic regression results for specificity.}
+\item{CLR_Wald_spe}{Wald test from conditional logistic regression results for specificity.}
 \item{Q_MN_spe}{Cochran's Q test (when the number of modalities is greater than 2) or McNemar's test (when the number of modalities is equal to 2) result for specificity This is only included if (1) effect = "Modality", (2) effect = "Reader", or (3) effect = "Both" and interaction = TRUE.}
 \item{formula}{Formula used in conditional logistic regression.}
 \item{n.reader}{Total number of readers.}

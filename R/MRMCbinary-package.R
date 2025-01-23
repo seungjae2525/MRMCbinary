@@ -12,9 +12,7 @@
 #'
 #' @keywords package
 #'
-#' @import survival
 #' @import DescTools
 #' @import stats
-#'
-#' @importFrom stats mcnemar.test
+#' @import survival
 "_PACKAGE"
