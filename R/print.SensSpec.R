@@ -11,11 +11,23 @@
 #' ## Load example data
 #' data(VanDyke)
 #'
-#' ## Return the First Parts of an Object
+#' ## Return the first parts of an object
 #' head(VanDyke)
+#'
+#' ## Extract Unique readers
+#' unique(VanDyke$reader)
+#'
+#' ## Extract unique modalities
+#' unique(VanDyke$treatment)
 #'
 #' ## Create binary test results (Y_ijk)
 #' VanDyke$Y <- as.numeric(VanDyke$rating >= 3)
+#'
+#' ## Example usage of SensSpec function:
+#' senspe_result <- SensSpec(data = VanDyke, Reader = reader,
+#'                           Modality = treatment, Case = case,
+#'                           D = truth, Y = Y, digits = 3)
+#' print(senspe_result)
 #'
 #' @keywords print
 #'

@@ -11,6 +11,7 @@ SensSpec(
   Case,
   D,
   Y,
+  percentage = FALSE,
   digits = max(1L, getOption("digits") - 3L)
 )
 }
@@ -23,18 +24,21 @@ SensSpec(
 
 \item{Case}{Variable of case identifiers.}
 
-\item{D}{Variable of true disease status.}
+\item{D}{Variable of true disease status. It should be set the value to 1 for cases diseased and to 0 for those non-diseased.}
 
-\item{Y}{Variable of binary diagnostic test result.}
+\item{Y}{Variable of binary diagnostic test result. It should be set the value to 1 for cases diagnosed as positive and to 0 for those diagnosed as negative.}
 
-\item{digits}{Summary digits. Default: max(1L, getOption("digits") - 3L).}
+\item{percentage}{Whether to report results as decimals or percentage points. Default: FALSE.}
+
+\item{digits}{The number of significant digits. Default: max(1L, getOption("digits") - 3L).}
 }
 \value{
 An object of class \code{SensSpec}. The object is a data.frame with the following components:
-\item{N}{Total number of subjects}
-\item{N.exposed}{The number of subjects in exposed group}
-The results for the \code{SensSpec} are printed with the xxxx function.
-To generate the plot of results for the \code{SensSpec}, use the xxxx function.
+\item{Overall Result}{Overall sensitivity and specificity}
+\item{Modality-specific Result}{Modality-specific sensitivity and specificity}
+\item{Reader-specific Modality-specific Result}{Reader-specific and modality-specific sensitivity and specificity}
+\item{digits}{The number of significant digits}
+The results for the \code{SensSpec} are printed with the \code{\link[MRMCbinary]{print.SensSpec}} function.
 }
 \description{
 \code{SensSpec()} is the function that calculates overall sensitivity and specificity, modality specific sensitivity and specificity, and modality specific and reader specific sensitivity and specificity.
@@ -43,12 +47,32 @@ To generate the plot of results for the \code{SensSpec}, use the xxxx function.
 ## Load example data
 data(VanDyke)
 
-## Return the First Parts of an Object
+## Return the first parts of an object
 head(VanDyke)
+
+## Extract Unique readers
+unique(VanDyke$reader)
+
+## Extract unique modalities
+unique(VanDyke$treatment)
 
 ## Create binary test results (Y_ijk)
 VanDyke$Y <- as.numeric(VanDyke$rating >= 3)
 
+## Example usage of SensSpec function:
+# Report results as decimals
+senspe_result1 <- SensSpec(data = VanDyke, Reader = reader,
+                           Modality = treatment, Case = case,
+                           D = truth, Y = Y, percentage = FALSE, digits = 3)
+
+# Report results as percentage points
+senspe_result2 <- SensSpec(data = VanDyke, Reader = reader,
+                           Modality = treatment, Case = case,
+                           D = truth, Y = Y, percentage = TRUE, digits = 1)
+
+}
+\references{
+Yerushalmy, J. (1947). Statistical Problems in Assessing Methods of Medical Diagnosis, with Special Reference to X-Ray Techniques. \emph{Public Health Reports (1896-1970)}, 62(40), 1432–1449.
 }
 \seealso{
 \code{\link[MRMCbinary]{print.SensSpec}}

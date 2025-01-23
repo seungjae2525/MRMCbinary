@@ -6,6 +6,11 @@ make_MRMCdata <- function(data, args, effect) {
                     D=data[[as.character(args$D)]],
                     Y=data[[as.character(args$Y)]])
 
+  ## Change variables to factor variables
+  dat$Reader <- factor(dat$Reader)
+  dat$Modality <- factor(dat$Modality)
+  dat$Case <- factor(dat$Case)
+
   ## Extract unique values for Reader and Modality
   Modalities <- unique(dat$Modality)
   Readers <- unique(dat$Reader)
@@ -16,26 +21,26 @@ make_MRMCdata <- function(data, args, effect) {
   ##
   if (effect == "Modality") {
     ## Long format data for sensitivity
-    dat_sens_long <- reshape(data = dat_sens, idvar=c("Case", "Reader"),
-                             timevar="Modality", direction="wide")
+    dat_sens_long <- reshape(data = dat_sens, idvar = c("Case", "Reader"),
+                             timevar = "Modality", direction = "wide")
     colnames(dat_sens_long) <- c("Reader", "ID",
                                  paste0("Modality", 1:length(Modalities)))
 
     ## Long format data for specificity
-    dat_spec_long <- reshape(data = dat_spec, idvar=c("Case", "Reader"),
-                             timevar="Modality", direction="wide")
+    dat_spec_long <- reshape(data = dat_spec, idvar = c("Case", "Reader"),
+                             timevar = "Modality", direction = "wide")
     colnames(dat_spec_long) <- c("Reader", "ID",
                                  paste0("Modality", 1:length(Modalities)))
   } else if (effect == "Reader") {
     ## Long format data for sensitivity
-    dat_sens_long <- reshape(data = dat_sens, idvar=c("Case", "Modality"),
-                             timevar="Reader", direction="wide")
+    dat_sens_long <- reshape(data = dat_sens, idvar = c("Case", "Modality"),
+                             timevar = "Reader", direction = "wide")
     colnames(dat_sens_long) <- c("Modality", "ID",
                                  paste0("Reader", 1:length(Readers)))
 
     ## Long format data for specificity
-    dat_spec_long <- reshape(data = dat_spec, idvar=c("Case", "Modality"),
-                             timevar="Reader", direction="wide")
+    dat_spec_long <- reshape(data = dat_spec, idvar = c("Case", "Modality"),
+                             timevar = "Reader", direction = "wide")
     colnames(dat_spec_long) <- c("Modality", "ID",
                                  paste0("Reader", 1:length(Readers)))
   } else if (effect == "Both") {
@@ -44,8 +49,8 @@ make_MRMCdata <- function(data, args, effect) {
     dat_sens_new$Modality_Reader <- interaction(dat_sens_new$Modality, dat_sens_new$Reader, sep = "_")
     dat_sens_new$Modality <- NULL
     dat_sens_new$Reader <- NULL
-    dat_sens_long <- reshape(data = dat_sens_new, idvar="Case",
-                             timevar="Modality_Reader", direction="wide")
+    dat_sens_long <- reshape(data = dat_sens_new, idvar = "Case",
+                             timevar = "Modality_Reader", direction = "wide")
     colnames(dat_sens_long) <- c("ID",
                                  c(outer(X = paste0("Modality", 1:length(Modalities)),
                                          Y = paste0("Reader", 1:length(Readers)),
@@ -56,8 +61,8 @@ make_MRMCdata <- function(data, args, effect) {
     dat_spec_new$Modality_Reader <- interaction(dat_spec_new$Modality, dat_spec_new$Reader, sep = "_")
     dat_spec_new$Modality <- NULL
     dat_spec_new$Reader <- NULL
-    dat_spec_long <- reshape(data = dat_spec_new, idvar="Case",
-                             timevar="Modality_Reader", direction="wide")
+    dat_spec_long <- reshape(data = dat_spec_new, idvar = "Case",
+                             timevar = "Modality_Reader", direction = "wide")
     colnames(dat_spec_long) <- c("ID",
                                  c(outer(X = paste0("Modality", 1:length(Modalities)),
                                          Y = paste0("Reader", 1:length(Readers)),

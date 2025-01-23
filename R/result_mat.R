@@ -1,4 +1,4 @@
-result_mat <- function(CLR_result_sen, CLR_result_spe, 
+result_mat <- function(CLR_result_sen, CLR_result_spe,
                        Q_MN_result_sen, Q_MN_result_spe, effect, interaction) {
 
   ##
@@ -10,16 +10,20 @@ result_mat <- function(CLR_result_sen, CLR_result_spe,
   CLR_LRT_sen <- summary(CLR_result_sen)$logtest
   CLR_Score_sen <- summary(CLR_result_sen)$sctest
   CLR_Wald_sen <- summary(CLR_result_sen)$waldtest
-  
-  mat_CLR_sen <- data.frame(Estimate=CLR_coef_sen, SE=CLR_SE_sen,
-                            Lower.ci=CLR_ci_sen[,1], Upper.ci=CLR_ci_sen[,2], P.value=CLR_PV_sen)
-  mat_CLR_LRT_sen <- data.frame(Statistic=CLR_LRT_sen[1], DF=CLR_LRT_sen[2], P.value=CLR_LRT_sen[3])
+
+  mat_CLR_sen <- data.frame(Estimate = CLR_coef_sen, SE = CLR_SE_sen,
+                            Lower.ci = CLR_ci_sen[,1], Upper.ci = CLR_ci_sen[,2],
+                            P.value = CLR_PV_sen)
+  mat_CLR_LRT_sen <- data.frame(Statistic = CLR_LRT_sen[1], DF = CLR_LRT_sen[2],
+                                P.value = CLR_LRT_sen[3])
   rownames(mat_CLR_LRT_sen) <- "LRT"
-  mat_CLR_Score_sen <- data.frame(Statistic=CLR_Score_sen[1], DF=CLR_Score_sen[2], P.value=CLR_Score_sen[3])
+  mat_CLR_Score_sen <- data.frame(Statistic = CLR_Score_sen[1], DF = CLR_Score_sen[2],
+                                  P.value = CLR_Score_sen[3])
   rownames(mat_CLR_Score_sen) <- "Score"
-  mat_CLR_Wald_sen <- data.frame(Statistic=CLR_Wald_sen[1], DF=CLR_Wald_sen[2], P.value=CLR_Wald_sen[3])
+  mat_CLR_Wald_sen <- data.frame(Statistic = CLR_Wald_sen[1], DF = CLR_Wald_sen[2],
+                                 P.value = CLR_Wald_sen[3])
   rownames(mat_CLR_Wald_sen) <- "Wald"
-  
+
   ##
   summary_CLR_spe <- data.frame(summary(CLR_result_spe)$coefficients)
   CLR_coef_spe <- exp(coef(CLR_result_spe))
@@ -29,62 +33,70 @@ result_mat <- function(CLR_result_sen, CLR_result_spe,
   CLR_LRT_spe <- summary(CLR_result_spe)$logtest
   CLR_Score_spe <- summary(CLR_result_spe)$sctest
   CLR_Wald_spe <- summary(CLR_result_spe)$waldtest
-  
-  mat_CLR_spe <- data.frame(Estimate=CLR_coef_spe, SE=CLR_SE_spe,
-                            Lower.ci=CLR_ci_spe[,1], Upper.ci=CLR_ci_spe[,2], P.value=CLR_PV_spe)
-  mat_CLR_LRT_spe <- data.frame(Statistic=CLR_LRT_spe[1], DF=CLR_LRT_spe[2], P.value=CLR_LRT_spe[3])
+
+  mat_CLR_spe <- data.frame(Estimate = CLR_coef_spe, SE = CLR_SE_spe,
+                            Lower.ci = CLR_ci_spe[,1], Upper.ci = CLR_ci_spe[,2],
+                            P.value = CLR_PV_spe)
+  mat_CLR_LRT_spe <- data.frame(Statistic = CLR_LRT_spe[1], DF = CLR_LRT_spe[2],
+                                P.value = CLR_LRT_spe[3])
   rownames(mat_CLR_LRT_spe) <- "LRT"
-  mat_CLR_Score_spe <- data.frame(Statistic=CLR_Score_spe[1], DF=CLR_Score_spe[2], P.value=CLR_Score_spe[3])
+  mat_CLR_Score_spe <- data.frame(Statistic = CLR_Score_spe[1], DF = CLR_Score_spe[2],
+                                  P.value = CLR_Score_spe[3])
   rownames(mat_CLR_Score_spe) <- "Score"
-  mat_CLR_Wald_spe <- data.frame(Statistic=CLR_Wald_spe[1], DF=CLR_Wald_spe[2], P.value=CLR_Wald_spe[3])
+  mat_CLR_Wald_spe <- data.frame(Statistic = CLR_Wald_spe[1], DF = CLR_Wald_spe[2],
+                                 P.value = CLR_Wald_spe[3])
   rownames(mat_CLR_Wald_spe) <- "Wald"
-  
+
   ##
   if (effect == "Both") {
     if (interaction == FALSE) {
-      return(list(CLR_sen=mat_CLR_sen, CLR_LRT_sen=mat_CLR_LRT_sen, 
-                  CLR_Score_sen=mat_CLR_Score_sen, CLR_Wald_sen=mat_CLR_Wald_sen, 
-                  
-                  CLR_spe=mat_CLR_spe, CLR_LRT_spe=mat_CLR_LRT_spe, 
-                  CLR_Score_spe=mat_CLR_Score_spe, CLR_Wald_spe=mat_CLR_Wald_spe)) 
+      return(list(CLR_sen = mat_CLR_sen, CLR_LRT_sen = mat_CLR_LRT_sen,
+                  CLR_Score_sen = mat_CLR_Score_sen, CLR_Wald_sen = mat_CLR_Wald_sen,
+
+                  CLR_spe = mat_CLR_spe, CLR_LRT_spe = mat_CLR_LRT_spe,
+                  CLR_Score_spe = mat_CLR_Score_spe, CLR_Wald_spe = mat_CLR_Wald_spe))
     } else {
       Q_MN_stat_sen <- Q_MN_result_sen$statistic
       Q_MN_DF_sen <- Q_MN_result_sen$parameter
       Q_MN_p_sen <- Q_MN_result_sen$p.value
-      mat_Q_MN_sen <- data.frame(Statistic=Q_MN_stat_sen, DF=Q_MN_DF_sen, P.value=Q_MN_p_sen)
-      
+      mat_Q_MN_sen <- data.frame(Statistic = Q_MN_stat_sen, DF = Q_MN_DF_sen,
+                                 P.value = Q_MN_p_sen)
+
       ##
       Q_MN_stat_spe <- Q_MN_result_spe$statistic
       Q_MN_DF_spe <- Q_MN_result_spe$parameter
       Q_MN_p_spe <- Q_MN_result_spe$p.value
-      mat_Q_MN_spe <- data.frame(Statistic=Q_MN_stat_spe, DF=Q_MN_DF_spe, P.value=Q_MN_p_spe)
-      
-      return(list(CLR_sen=mat_CLR_sen, CLR_LRT_sen=mat_CLR_LRT_sen, 
-                  CLR_Score_sen=mat_CLR_Score_sen, CLR_Wald_sen=mat_CLR_Wald_sen, 
-                  Q_MN_sen=mat_Q_MN_sen, 
-                  
-                  CLR_spe=mat_CLR_spe, CLR_LRT_spe=mat_CLR_LRT_spe, 
-                  CLR_Score_spe=mat_CLR_Score_spe, CLR_Wald_spe=mat_CLR_Wald_spe, 
-                  Q_MN_spe=mat_Q_MN_spe)) 
+      mat_Q_MN_spe <- data.frame(Statistic = Q_MN_stat_spe, DF = Q_MN_DF_spe,
+                                 P.value = Q_MN_p_spe)
+
+      return(list(CLR_sen = mat_CLR_sen, CLR_LRT_sen = mat_CLR_LRT_sen,
+                  CLR_Score_sen = mat_CLR_Score_sen, CLR_Wald_sen = mat_CLR_Wald_sen,
+                  Q_MN_sen = mat_Q_MN_sen,
+
+                  CLR_spe = mat_CLR_spe, CLR_LRT_spe = mat_CLR_LRT_spe,
+                  CLR_Score_spe = mat_CLR_Score_spe, CLR_Wald_spe = mat_CLR_Wald_spe,
+                  Q_MN_spe = mat_Q_MN_spe))
     }
   } else {
     Q_MN_stat_sen <- Q_MN_result_sen$statistic
     Q_MN_DF_sen <- Q_MN_result_sen$parameter
     Q_MN_p_sen <- Q_MN_result_sen$p.value
-    mat_Q_MN_sen <- data.frame(Statistic=Q_MN_stat_sen, DF=Q_MN_DF_sen, P.value=Q_MN_p_sen)
-    
+    mat_Q_MN_sen <- data.frame(Statistic = Q_MN_stat_sen, DF = Q_MN_DF_sen,
+                               P.value = Q_MN_p_sen)
+
     ##
     Q_MN_stat_spe <- Q_MN_result_spe$statistic
     Q_MN_DF_spe <- Q_MN_result_spe$parameter
     Q_MN_p_spe <- Q_MN_result_spe$p.value
-    mat_Q_MN_spe <- data.frame(Statistic=Q_MN_stat_spe, DF=Q_MN_DF_spe, P.value=Q_MN_p_spe)
-    
-    return(list(CLR_sen=mat_CLR_sen, CLR_LRT_sen=mat_CLR_LRT_sen, 
-                CLR_Score_sen=mat_CLR_Score_sen, CLR_Wald_sen=mat_CLR_Wald_sen, 
-                Q_MN_sen=mat_Q_MN_sen, 
-                
-                CLR_spe=mat_CLR_spe, CLR_LRT_spe=mat_CLR_LRT_spe, 
-                CLR_Score_spe=mat_CLR_Score_spe, CLR_Wald_spe=mat_CLR_Wald_spe, 
-                Q_MN_spe=mat_Q_MN_spe)) 
+    mat_Q_MN_spe <- data.frame(Statistic = Q_MN_stat_spe, DF = Q_MN_DF_spe,
+                               P.value = Q_MN_p_spe)
+
+    return(list(CLR_sen = mat_CLR_sen, CLR_LRT_sen = mat_CLR_LRT_sen,
+                CLR_Score_sen = mat_CLR_Score_sen, CLR_Wald_sen = mat_CLR_Wald_sen,
+                Q_MN_sen = mat_Q_MN_sen,
+
+                CLR_spe = mat_CLR_spe, CLR_LRT_spe = mat_CLR_LRT_spe,
+                CLR_Score_spe = mat_CLR_Score_spe, CLR_Wald_spe = mat_CLR_Wald_spe,
+                Q_MN_spe = mat_Q_MN_spe))
   }
 }

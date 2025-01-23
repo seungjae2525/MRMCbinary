@@ -8,16 +8,16 @@
 A data frame with 1140 rows and 7 variables:
 \describe{
 \item{reader}{reader identifier}
-\item{treatment}{treatment identifier}
+\item{treatment}{treatment (i.e., modality) identifier}
 \item{case}{case identifier (factorial design)}
 \item{case2}{case identifier (cases nested within readers)}
 \item{case3}{case identifier (cases nested within treatments)}
-\item{truth}{true case status (1 = positive, 0 = negative)}
-\item{rating}{ordinal reader ratings of case status}
+\item{truth}{true disease status (1 = positive, 0 = negative)}
+\item{rating}{ordinal reader ratings of case status (i.e., diagnostic test result)}
 }
 }
 \source{
-\url{https://raw.githubusercontent.com/brian-j-smith/MRMCaov/master/data}
+\url{https://github.com/brian-j-smith/MRMCaov/tree/master/data}
 }
 \usage{
 VanDyke
@@ -26,10 +26,9 @@ VanDyke
 Multi-reader multi-case dataset
 }
 \details{
-One can download this data directly (in RData format) from the following url: https://raw.githubusercontent.com/brian-j-smith/MRMCaov/master/data
+One can directly use this data from MRMCaov package.
 }
 \references{
-Van Dyke CW, White RD, Obuchowski NA, Geisinger MA, Lorig RJ, Meziane MA (1993).
-Cine MRI in the diagnosis of thoracic aortic dissection. 79th Radiological Society of North America Meetings, Chicago, IL.
+Van Dyke, C. W., White, R. D., Obuchowski, N. A., Geisinger, M. A., Lorig, R. J., & Meziane, M. A. (1993). Cine MRI in the diagnosis of thoracic aortic dissection. 79th RSNA Meetings. \emph{Chicago, IL}, 28.
 }
 \keyword{datasets}

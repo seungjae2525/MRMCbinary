@@ -1,15 +1,12 @@
 Package: MRMCbinary
-Version: 0.0.0.9000
-Title: MRMCbinary: Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study
-Description: R package \bold{MRMCbinary} is a package aimed at analyzing the performance of diagnostic tests for binary outcome.
+Title: Multi-Reader Multi-Case Analysis of Binary Diagnostic Tests
+Version: 1.0.1
+Description: R package MRMCbinary is a package aimed at comparing the performance of diagnostic tests (i.e., sensitivity and specificity) for binary outcome in multi-reader multi-case (MRMC) study.
 License: MIT + file LICENSE
 URL: https://github.com/seungjae2525/MRMCbinary
 BugReports: https://github.com/seungjae2525/MRMCbinary/issues
-Depends: R (>= 4.0.0)
-Imports: 
-    DescTools,
-    stats,
-    survival
+Depends: R (>= 4.2.0)
+Imports: DescTools, stats, survival
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2

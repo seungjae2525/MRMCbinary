@@ -3,12 +3,12 @@
 \docType{package}
 \name{MRMCbinary-package}
 \alias{MRMCbinary-package}
-\title{MRMCbinary: Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study}
+\title{MRMCbinary: Multi-reader multi-case analysis of binary diagnostic tests}
 \description{
-R package \bold{MRMCbinary} is a package aimed at analyzing the performance of diagnostic tests for binary outcome.
+R package \bold{MRMCbinary} is a package aimed at comparing the performance of diagnostic tests (i.e., sensitivity and specificity) for binary outcome in multi-reader multi-case (MRMC) study.
 }
 \references{
-Lee, S., Jang, S., and Lee, W. Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study. \emph{submitted}.
+Lee, S., Jang, S., and Lee, W. Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study.
 }
 \seealso{
 Useful links:

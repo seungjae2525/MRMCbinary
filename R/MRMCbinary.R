@@ -1,44 +1,50 @@
 MRMCbinary <- function(...) UseMethod("MRMCbinary")
 
-#' @title Sensitivity range of the difference in adjusted RMST
+#' @title Multi-reader multi-case analysis of binary diagnostic tests
 #'
 #' @description \code{MRMCbinary()} is the main function of \code{MRMCbinary} package and
-#' performs the analysis the performance of diagnostic tests for binary outcome.
+#' can be used to compare sensitivity and specificity of diagnostic tests for binary outcome in multi-reader multi-case (MRMC) study.
 #'
 #' @param data A data frame in which contains the reader identifiers (Reader), modality identifiers (Modality), case identifiers (Case), true disease status (D), and binary diagnostic test result (Y).
 #' @param Reader Variable of reader identifiers.
 #' @param Modality Variable of modality identifiers.
 #' @param Case Variable of case identifiers.
-#' @param D Variable of true disease status.
-#' @param Y Variable of binary diagnostic test result.
+#' @param D Variable of true disease status. It should be set the value to 1 for cases diseased and to 0 for those non-diseased.
+#' @param Y Variable of binary diagnostic test result. It should be set the value to 1 for cases diagnosed as positive and to 0 for those diagnosed as negative.
 #' @param effect Effect one wants to evaluate (one of "Modality", "Reader", and "Both").
-#' @param interaction If one want to evaluate the interaction effect between modality and reader, interaction = "TRUE", otherwise "FALSE". Specify only when effect is "both". Default: NULL.
+#' @param interaction If one want to evaluate the interaction effect between modality and reader, interaction = "TRUE", otherwise "FALSE". Specify only when effect is "Both". Default: NULL.
 #' @param reference.Modality Reference in Variable of modality identifiers.
 #' @param reference.Reader Reference in Variable of reader identifiers.
 #'
 #' @return An object of class \code{MRMCbinary}. The object is a data.frame with the following components:
-#' \item{N}{Total number of subjects}
-#' \item{N.exposed}{The number of subjects in exposed group}
-#' The results for the \code{MRMCbinary} are printed with the XXXXX function.
-#' To generate the plot of results for the \code{MRMCbinary}, use the XXXXX function.
+#' \item{CLR_sen}{Conditional logistic regression results for sensitivity.}
+#' \item{CLR_LRT_sen}{Likelihood ratio test of conditional logistic regression results for sensitivity.}
+#' \item{CLR_Score_sen}{Score test of conditional logistic regression results for sensitivity.}
+#' \item{CLR_Wald_sen}{Wald test of conditional logistic regression results for sensitivity.}
+#' \item{Q_MN_sen}{Cochran's Q test (when the number of modalities is greater than 2) or McNemar's test (when the number of modalities is equal to 2) result for sensitivity. This is only included if (1) effect = "Modality", (2) effect = "Reader", or (3) effect = "Both" and interaction = TRUE.}
+#' \item{CLR_spe}{Conditional logistic regression results for specificity.}
+#' \item{CLR_LRT_spe}{Likelihood ratio test of conditional logistic regression results for specificity.}
+#' \item{CLR_Score_spe}{Score test of conditional logistic regression results for specificity.}
+#' \item{CLR_Wald_spe}{Wald test of conditional logistic regression results for specificity.}
+#' \item{Q_MN_spe}{Cochran's Q test (when the number of modalities is greater than 2) or McNemar's test (when the number of modalities is equal to 2) result for specificity This is only included if (1) effect = "Modality", (2) effect = "Reader", or (3) effect = "Both" and interaction = TRUE.}
+#' \item{formula}{Formula used in conditional logistic regression.}
+#' \item{n.reader}{Total number of readers.}
+#' \item{n.modality}{Total number of modalities.}
+#' \item{effect}{Effect one wants to evaluate. See Details.}
+#' \item{interaction}{If one want to evaluate the interaction effect between modality and reader in conditional logistic regression, interaction = "TRUE", otherwise "FALSE". Specify only when effect is "Both". This is only included if effect = "Both" and interaction = TRUE. See Details.}
+#' \item{reference.Modality}{Reference in variable of modality identifiers.}
+#' \item{reference.Reader}{Reference in variable of reader identifiers.}
+#' The results for the \code{SensSpec} are printed with the \code{\link[MRMCbinary]{print.MRMCbinary}} function.
+#' Also, the results for the \code{SensSpec} are summarized with the \code{\link[MRMCbinary]{summary.MRMCbinary}} function.
 #'
-#' @details There are four possible methods for our sensitivity analysis.
+#' @details There are three effects that can be evaluated:
 #'
-#' In general settings,
-#'   * methods="Approx": In general survival analysis setting, if the censoring rate is less than 0.7,
-#'   the approximate optimization method can be recommended
-#'   because it is much faster than and very accurate as the direct optimization method.
-#'   * methods="Optim": If the censoring rate is greater than 0.7, the direct optimization method can be used as an alternative
-#'   because it is implemented as fast as the approximate optimization method.
-#'
-#' In special settings, some analytic results can be obtained.
-#'   * methods="LP1": When a closed cohort where all subjects are followed up from the same entry time and
-#'   only administrative censoring is allowed at the end of follow-up is considered,
-#'   high-dimensional optimization problems can be expressed as the well-known linear programming problems,
-#'   and thus one can use the analytic solutions for computing the sensitivity range.
-#'   * methods="LP2": Similarly, when the minimum value of censoring times in each group is longer than or equal to tau,
-#'   the optimization problems are also transformed to well-known linear programming problems,
-#'   and thus one can use the analytic solutions for computing the sensitivity range.
+#'   * effect="Modality": This is used when the goal is to exclusively evaluate the effect of multiple modalities.
+#'   * effect="Reader": This is used when the goal is to exclusively evaluate the effect of multiple readers.
+#'   * effect="Both": This is used when the goal is to simultaneously evaluate the effect of multiple modalities and multiple readers.
+#'   In this case, "interaction" must be specified.
+#'   If one want to evaluate the interaction effect between modality and reader in conditional logistic regression, interaction = "TRUE", otherwise "FALSE".
+#'   When interaction effects are taken into account, main effects of modalities or readers cannot be interpreted.
 #'
 #' See Lee et al. (2025) for details.
 #'
@@ -46,25 +52,58 @@ MRMCbinary <- function(...) UseMethod("MRMCbinary")
 #' ## Load example data
 #' data(VanDyke)
 #'
-#' ## Return the First Parts of an Object
+#' ## Return the first parts of an object
 #' head(VanDyke)
+#'
+#' ## Extract Unique readers
+#' unique(VanDyke$reader)
+#'
+#' ## Extract unique modalities
+#' unique(VanDyke$treatment)
 #'
 #' ## Create binary test results (Y_ijk)
 #' VanDyke$Y <- as.numeric(VanDyke$rating >= 3)
+#'
+#' ## Example usage of MRMCbinary function:
+#' # When comparing the sensitivities and specificities between modalities
+#' modality_result <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
+#'                               Case = case, D = truth, Y = Y, effect = "Modality",
+#'                               interaction = NULL,
+#'                               reference.Modality = "1", reference.Reader = "1")
+#'
+#' # When comparing the sensitivities and specificities between readers
+#' reader_result <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
+#'                             Case = case, D = truth, Y = Y, effect = "Reader",
+#'                             interaction = NULL,
+#'                             reference.Modality = "1", reference.Reader = "1")
+#'
+#' # When comparing the sensitivities and specificities between modalities and between readers together
+#' #  not considering interaction between modalities and readers
+#' both_result_wo_int <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
+#'                                  Case = case, D = truth, Y = Y, effect = "Both",
+#'                                  interaction = FALSE,
+#'                                  reference.Modality = "1", reference.Reader = "1")
+#'
+#' # When comparing the sensitivities and specificities between modalities and between readers together
+#' #  considering interaction between modalities and readers
+#' both_result_with_int <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
+#'                                    Case = case, D = truth, Y = Y, effect = "Both",
+#'                                    interaction = TRUE,
+#'                                    reference.Modality = "1", reference.Reader = "1")
 #'
 #' @seealso
 #'  \code{\link[MRMCbinary]{print.MRMCbinary}}, \code{\link[MRMCbinary]{summary.MRMCbinary}}
 #'
 #' @references
-#' Lee, S., Jang, S., and Lee, W. Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study. submitted.
+#' Lee, S., Jang, S., and Lee, W. Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study.
 #'
 #' @keywords methods
 #'
 #' @export
 
 MRMCbinary <- function(data, Reader, Modality, Case, D, Y, effect,
-                       interaction=NULL,
-                       reference.Modality, reference.Reader) {
+                       interaction = NULL,
+                       reference.Modality = NULL, reference.Reader = NULL) {
   ## List of arguments for MRMCbinary function
   args <- eval(substitute(alist(Reader = Reader, Modality = Modality, Case = Case, D = D, Y = Y)))
 
@@ -86,6 +125,12 @@ MRMCbinary <- function(data, Reader, Modality, Case, D, Y, effect,
   if (as.character(args$Y) %notin% colnames(data)) {
     stop("\n Error: Diagnostic test result variable (i.e., Y) must be included in data.")
   }
+  if (all(data[[as.character(args$D)]] %notin% c(0, 1))) {
+    stop("\n Error: True disease status variable (i.e., D) should be set the value to 1 for cases diseased and to 0 for those non-diseased.")
+  }
+  if (all(data[[as.character(args$Y)]] %notin% c(0, 1))) {
+    stop("\n Error: Diagnostic test result variable (i.e., Y) should be set the value to 1 for cases diagnosed as positive and to 0 for those diagnosed as negative.")
+  }
 
   ## Extract unique values for Reader and Modality
   Cases <- unique(data[[as.character(args$Case)]])
@@ -105,9 +150,19 @@ MRMCbinary <- function(data, Reader, Modality, Case, D, Y, effect,
   if (length(Modalities) < 2) {
     stop("\n Error: The number of modalities must be greater than or equal to 2.")
   }
+  # When reference.Reader is NULL
+  if (is.null(reference.Reader)) {
+    warning(paste0("\"reference.Reader\" is NULL. \"reference.Reader\" is set to the first reader (i.e., ", Readers[1], ")."))
+    reference.Reader <- Readers[1]
+  }
   # Is reference.Reader a value contained in the Reader variable?
   if (reference.Reader %notin% Readers) {
     stop("\n Error: Reference of Reader variable must be included in data.")
+  }
+  # When reference.Modality is NULL
+  if (is.null(reference.Modality)) {
+    warning(paste0("\"reference.Modality\" is NULL. \"reference.Modality\" is set to the first modality (i.e., ", Modalities[1], ")."))
+    reference.Modality <- Modalities[1]
   }
   # Is reference.Modality a value contained in the Modality variable?
   if (reference.Modality %notin% Modalities) {
@@ -116,7 +171,7 @@ MRMCbinary <- function(data, Reader, Modality, Case, D, Y, effect,
 
   ## Warnings
   if (effect %in% c("Modality", "Reader") & !is.null(interaction)) {
-    warning("\n Warning: If \"effect\" is \"Modality\" or \"Reader\", then \"interaction\" sholud be NULL.")
+    warning("If \"effect\" is \"Modality\" or \"Reader\", then \"interaction\" sholud be NULL.")
     interaction <- NULL
   }
   if (effect == "Both") {
@@ -126,7 +181,7 @@ MRMCbinary <- function(data, Reader, Modality, Case, D, Y, effect,
   }
 
   ## Make data for MRMC analysis
-  all_data <- make_MRMCdata(data=data, args=args, effect=effect)
+  all_data <- make_MRMCdata(data = data, args = args, effect = effect)
 
   ## Split data
   data_sen_clr <- all_data[[1]]
@@ -137,68 +192,68 @@ MRMCbinary <- function(data, Reader, Modality, Case, D, Y, effect,
   ##
   if (effect == "Modality") {
     CLR_result_sen <- survival::clogit(formula = Y ~ Modality + survival::strata(Case, Reader),
-                                       data=data_sen_clr)
+                                       data = data_sen_clr)
     CLR_result_spe <- survival::clogit(formula = Y ~ Modality + survival::strata(Case, Reader),
-                                       data=data_spe_clr)
+                                       data = data_spe_clr)
     if (length(Modalities) == 2) {
-      Q_MN_result_sen <- stats::mcnemar.test(x=table(data_sen_q[, -c(1,2)]), correct=FALSE)
-      Q_MN_result_spe <- stats::mcnemar.test(x=table(data_spe_q[, -c(1,2)]), correct=FALSE)
+      Q_MN_result_sen <- stats::mcnemar.test(x = table(data_sen_q[, -c(1,2)]), correct = FALSE)
+      Q_MN_result_spe <- stats::mcnemar.test(x = table(data_spe_q[, -c(1,2)]), correct = FALSE)
     } else {
-      Q_MN_result_sen <- DescTools::CochranQTest(y=as.matrix(data_sen_q[, -c(1,2)]))
-      Q_MN_result_spe <- DescTools::CochranQTest(y=as.matrix(data_spe_q[, -c(1,2)]))
+      Q_MN_result_sen <- DescTools::CochranQTest(y = as.matrix(data_sen_q[, -c(1,2)]))
+      Q_MN_result_spe <- DescTools::CochranQTest(y = as.matrix(data_spe_q[, -c(1,2)]))
     }
     ##
-    Final_result <- result_mat(CLR_result_sen, CLR_result_spe,
-                               Q_MN_result_sen, Q_MN_result_spe,
-                               effect=effect, interaction=interaction)
+    Final_result <- result_mat(CLR_result_sen = CLR_result_sen, CLR_result_spe = CLR_result_spe,
+                               Q_MN_result_sen = Q_MN_result_sen, Q_MN_result_spe = Q_MN_result_spe,
+                               effect = effect, interaction = interaction)
 
     Final_result$formula <- as.character(CLR_result_spe$userCall)[2]
 
   } else if (effect == "Reader") {
     CLR_result_sen <- survival::clogit(formula = Y ~ Reader + survival::strata(Case, Modality),
-                                       data=data_sen_clr)
+                                       data = data_sen_clr)
     CLR_result_spe <- survival::clogit(formula = Y ~ Reader + survival::strata(Case, Modality),
-                                       data=data_spe_clr)
+                                       data = data_spe_clr)
     if (length(Readers) == 2) {
-      Q_MN_result_sen <- stats::mcnemar.test(x=table(data_sen_q[, -c(1,2)]), correct=FALSE)
-      Q_MN_result_spe <- stats::mcnemar.test(x=table(data_spe_q[, -c(1,2)]), correct=FALSE)
+      Q_MN_result_sen <- stats::mcnemar.test(x = table(data_sen_q[, -c(1,2)]), correct = FALSE)
+      Q_MN_result_spe <- stats::mcnemar.test(x = table(data_spe_q[, -c(1,2)]), correct = FALSE)
     } else {
-      Q_MN_result_sen <- DescTools::CochranQTest(y=as.matrix(data_sen_q[, -c(1,2)]))
-      Q_MN_result_spe <- DescTools::CochranQTest(y=as.matrix(data_spe_q[, -c(1,2)]))
+      Q_MN_result_sen <- DescTools::CochranQTest(y = as.matrix(data_sen_q[, -c(1,2)]))
+      Q_MN_result_spe <- DescTools::CochranQTest(y = as.matrix(data_spe_q[, -c(1,2)]))
     }
     ##
-    Final_result <- result_mat(CLR_result_sen, CLR_result_spe,
-                               Q_MN_result_sen, Q_MN_result_spe,
-                               effect=effect, interaction=interaction)
+    Final_result <- result_mat(CLR_result_sen = CLR_result_sen, CLR_result_spe = CLR_result_spe,
+                               Q_MN_result_sen = Q_MN_result_sen, Q_MN_result_spe = Q_MN_result_spe,
+                               effect = effect, interaction = interaction)
 
     Final_result$formula <- as.character(CLR_result_spe$userCall)[2]
 
   } else if (effect == "Both") {
     if (interaction == TRUE) {
       CLR_result_sen <- survival::clogit(formula = Y ~ Modality * Reader + survival::strata(Case),
-                                         data=data_sen_clr)
+                                         data = data_sen_clr)
       CLR_result_spe <- survival::clogit(formula = Y ~ Modality * Reader + survival::strata(Case),
-                                         data=data_spe_clr)
+                                         data = data_spe_clr)
 
-      Q_MN_result_sen <- DescTools::CochranQTest(y=as.matrix(data_sen_q[, -c(1)]))
-      Q_MN_result_spe <- DescTools::CochranQTest(y=as.matrix(data_spe_q[, -c(1)]))
+      Q_MN_result_sen <- DescTools::CochranQTest(y = as.matrix(data_sen_q[, -c(1)]))
+      Q_MN_result_spe <- DescTools::CochranQTest(y = as.matrix(data_spe_q[, -c(1)]))
 
       ##
-      Final_result <- result_mat(CLR_result_sen, CLR_result_spe,
-                                 Q_MN_result_sen, Q_MN_result_spe,
-                                 effect=effect, interaction=interaction)
+      Final_result <- result_mat(CLR_result_sen = CLR_result_sen, CLR_result_spe = CLR_result_spe,
+                                 Q_MN_result_sen = Q_MN_result_sen, Q_MN_result_spe = Q_MN_result_spe,
+                                 effect = effect, interaction = interaction)
 
       Final_result$formula <- as.character(CLR_result_spe$userCall)[2]
     } else {
       CLR_result_sen <- survival::clogit(formula = Y ~ Modality + Reader + survival::strata(Case),
-                                         data=data_sen_clr)
+                                         data = data_sen_clr)
       CLR_result_spe <- survival::clogit(formula = Y ~ Modality + Reader + survival::strata(Case),
-                                         data=data_spe_clr)
+                                         data = data_spe_clr)
 
       ##
-      Final_result <- result_mat(CLR_result_sen, CLR_result_spe,
-                                 Q_MN_result_sen, Q_MN_result_spe,
-                                 effect=effect, interaction=interaction)
+      Final_result <- result_mat(CLR_result_sen = CLR_result_sen, CLR_result_spe = CLR_result_spe,
+                                 Q_MN_result_sen = Q_MN_result_sen, Q_MN_result_spe = Q_MN_result_spe,
+                                 effect = effect, interaction = interaction)
 
       Final_result$formula <- as.character(CLR_result_spe$userCall)[2]
     }

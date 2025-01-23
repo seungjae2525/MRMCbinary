@@ -2,7 +2,7 @@
 % Please edit documentation in R/MRMCbinary.R
 \name{MRMCbinary}
 \alias{MRMCbinary}
-\title{Sensitivity range of the difference in adjusted RMST}
+\title{Multi-reader multi-case analysis of binary diagnostic tests}
 \usage{
 MRMCbinary(
   data,
@@ -13,8 +13,8 @@ MRMCbinary(
   Y,
   effect,
   interaction = NULL,
-  reference.Modality,
-  reference.Reader
+  reference.Modality = NULL,
+  reference.Reader = NULL
 )
 }
 \arguments{
@@ -26,13 +26,13 @@ MRMCbinary(
 
 \item{Case}{Variable of case identifiers.}
 
-\item{D}{Variable of true disease status.}
+\item{D}{Variable of true disease status. It should be set the value to 1 for cases diseased and to 0 for those non-diseased.}
 
-\item{Y}{Variable of binary diagnostic test result.}
+\item{Y}{Variable of binary diagnostic test result. It should be set the value to 1 for cases diagnosed as positive and to 0 for those diagnosed as negative.}
 
 \item{effect}{Effect one wants to evaluate (one of "Modality", "Reader", and "Both").}
 
-\item{interaction}{If one want to evaluate the interaction effect between modality and reader, interaction = "TRUE", otherwise "FALSE". Specify only when effect is "both". Default: NULL.}
+\item{interaction}{If one want to evaluate the interaction effect between modality and reader, interaction = "TRUE", otherwise "FALSE". Specify only when effect is "Both". Default: NULL.}
 
 \item{reference.Modality}{Reference in Variable of modality identifiers.}
 
@@ -40,36 +40,39 @@ MRMCbinary(
 }
 \value{
 An object of class \code{MRMCbinary}. The object is a data.frame with the following components:
-\item{N}{Total number of subjects}
-\item{N.exposed}{The number of subjects in exposed group}
-The results for the \code{MRMCbinary} are printed with the XXXXX function.
-To generate the plot of results for the \code{MRMCbinary}, use the XXXXX function.
+\item{CLR_sen}{Conditional logistic regression results for sensitivity.}
+\item{CLR_LRT_sen}{Likelihood ratio test of conditional logistic regression results for sensitivity.}
+\item{CLR_Score_sen}{Score test of conditional logistic regression results for sensitivity.}
+\item{CLR_Wald_sen}{Wald test of conditional logistic regression results for sensitivity.}
+\item{Q_MN_sen}{Cochran's Q test (when the number of modalities is greater than 2) or McNemar's test (when the number of modalities is equal to 2) result for sensitivity. This is only included if (1) effect = "Modality", (2) effect = "Reader", or (3) effect = "Both" and interaction = TRUE.}
+\item{CLR_spe}{Conditional logistic regression results for specificity.}
+\item{CLR_LRT_spe}{Likelihood ratio test of conditional logistic regression results for specificity.}
+\item{CLR_Score_spe}{Score test of conditional logistic regression results for specificity.}
+\item{CLR_Wald_spe}{Wald test of conditional logistic regression results for specificity.}
+\item{Q_MN_spe}{Cochran's Q test (when the number of modalities is greater than 2) or McNemar's test (when the number of modalities is equal to 2) result for specificity This is only included if (1) effect = "Modality", (2) effect = "Reader", or (3) effect = "Both" and interaction = TRUE.}
+\item{formula}{Formula used in conditional logistic regression.}
+\item{n.reader}{Total number of readers.}
+\item{n.modality}{Total number of modalities.}
+\item{effect}{Effect one wants to evaluate. See Details.}
+\item{interaction}{If one want to evaluate the interaction effect between modality and reader in conditional logistic regression, interaction = "TRUE", otherwise "FALSE". Specify only when effect is "Both". This is only included if effect = "Both" and interaction = TRUE. See Details.}
+\item{reference.Modality}{Reference in variable of modality identifiers.}
+\item{reference.Reader}{Reference in variable of reader identifiers.}
+The results for the \code{SensSpec} are printed with the \code{\link[MRMCbinary]{print.MRMCbinary}} function.
+Also, the results for the \code{SensSpec} are summarized with the \code{\link[MRMCbinary]{summary.MRMCbinary}} function.
 }
 \description{
 \code{MRMCbinary()} is the main function of \code{MRMCbinary} package and
-performs the analysis the performance of diagnostic tests for binary outcome.
+can be used to compare sensitivity and specificity of diagnostic tests for binary outcome in multi-reader multi-case (MRMC) study.
 }
 \details{
-There are four possible methods for our sensitivity analysis.
-
-In general settings,
+There are three effects that can be evaluated:
 \itemize{
-\item methods="Approx": In general survival analysis setting, if the censoring rate is less than 0.7,
-the approximate optimization method can be recommended
-because it is much faster than and very accurate as the direct optimization method.
-\item methods="Optim": If the censoring rate is greater than 0.7, the direct optimization method can be used as an alternative
-because it is implemented as fast as the approximate optimization method.
-}
-
-In special settings, some analytic results can be obtained.
-\itemize{
-\item methods="LP1": When a closed cohort where all subjects are followed up from the same entry time and
-only administrative censoring is allowed at the end of follow-up is considered,
-high-dimensional optimization problems can be expressed as the well-known linear programming problems,
-and thus one can use the analytic solutions for computing the sensitivity range.
-\item methods="LP2": Similarly, when the minimum value of censoring times in each group is longer than or equal to tau,
-the optimization problems are also transformed to well-known linear programming problems,
-and thus one can use the analytic solutions for computing the sensitivity range.
+\item effect="Modality": This is used when the goal is to exclusively evaluate the effect of multiple modalities.
+\item effect="Reader": This is used when the goal is to exclusively evaluate the effect of multiple readers.
+\item effect="Both": This is used when the goal is to simultaneously evaluate the effect of multiple modalities and multiple readers.
+In this case, "interaction" must be specified.
+If one want to evaluate the interaction effect between modality and reader in conditional logistic regression, interaction = "TRUE", otherwise "FALSE".
+When interaction effects are taken into account, main effects of modalities or readers cannot be interpreted.
 }
 
 See Lee et al. (2025) for details.
@@ -78,15 +81,48 @@ See Lee et al. (2025) for details.
 ## Load example data
 data(VanDyke)
 
-## Return the First Parts of an Object
+## Return the first parts of an object
 head(VanDyke)
+
+## Extract Unique readers
+unique(VanDyke$reader)
+
+## Extract unique modalities
+unique(VanDyke$treatment)
 
 ## Create binary test results (Y_ijk)
 VanDyke$Y <- as.numeric(VanDyke$rating >= 3)
 
+## Example usage of MRMCbinary function:
+# When comparing the sensitivities and specificities between modalities
+modality_result <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
+                              Case = case, D = truth, Y = Y, effect = "Modality",
+                              interaction = NULL,
+                              reference.Modality = "1", reference.Reader = "1")
+
+# When comparing the sensitivities and specificities between readers
+reader_result <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
+                            Case = case, D = truth, Y = Y, effect = "Reader",
+                            interaction = NULL,
+                            reference.Modality = "1", reference.Reader = "1")
+
+# When comparing the sensitivities and specificities between modalities and between readers together
+#  not considering interaction between modalities and readers
+both_result_wo_int <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
+                                 Case = case, D = truth, Y = Y, effect = "Both",
+                                 interaction = FALSE,
+                                 reference.Modality = "1", reference.Reader = "1")
+
+# When comparing the sensitivities and specificities between modalities and between readers together
+#  considering interaction between modalities and readers
+both_result_with_int <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
+                                   Case = case, D = truth, Y = Y, effect = "Both",
+                                   interaction = TRUE,
+                                   reference.Modality = "1", reference.Reader = "1")
+
 }
 \references{
-Lee, S., Jang, S., and Lee, W. Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study. submitted.
+Lee, S., Jang, S., and Lee, W. Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study.
 }
 \seealso{
 \code{\link[MRMCbinary]{print.MRMCbinary}}, \code{\link[MRMCbinary]{summary.MRMCbinary}}
