@@ -19,7 +19,7 @@ Lee, S., Jang, S., and Lee, W. Evaluating Diagnostic Accuracy of Binary Medical 
 
 ## Installation
 ### Current GitHub release:
-Installation using R package `remotes`:
+Installation using R package `devtools`:
 
 ```r
 if (!require("devtools")) { install.packages("devtools") } # if devtools not already installed
