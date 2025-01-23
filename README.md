@@ -28,7 +28,7 @@ library(MRMCbinary)
 ```
 
 ## Example
-This is a basic example which shows you how to use MRMCbinary package:
+This is a basic example which shows you how to use `MRMCbinary` package:
 
 ``` r
 ## Load MRMCbinary package
