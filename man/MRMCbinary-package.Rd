@@ -8,7 +8,7 @@
 R package \bold{MRMCbinary} is a package aimed at comparing the performance of diagnostic tests (i.e., sensitivity and specificity) for binary outcome in multi-reader multi-case (MRMC) study.
 }
 \references{
-Lee, S., Jang, S., and Lee, W. Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study.
+Lee, S., Jang, S., and Lee, W. (2025). Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study.
 }
 \seealso{
 Useful links:
