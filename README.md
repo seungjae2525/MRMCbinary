@@ -8,11 +8,11 @@
 [![R-CMD-check](https://github.com/seungjae2525/MRMCbinary/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/seungjae2525/MRMCbinary/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-# MRMCbinary: Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study
+# Multi-Reader Multi-Case Analysis of Binary Diagnostic Tests
 
 ## Description
 This is the source code for the `MRMCbinary` package in R. 
-`MRMCbinary` is a package aimed at analyzing the performance of diagnostic tests for binary outcome.
+`MRMCbinary` is a package aimed at comparing the performance of diagnostic tests (i.e., sensitivity and specificity) for binary outcome in multi-reader multi-case (MRMC) study.
  
 ### Reference
 Lee, S., Jang, S., and Lee, W. Evaluating Diagnostic Accuracy of Binary Medical Tests in Multi-reader Multi-case Study.
