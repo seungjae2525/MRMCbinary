@@ -31,7 +31,9 @@ library(MRMCbinary)
 This is a basic example which shows you how to use MRMCbinary package:
 
 ``` r
+## Load MRMCbinary package
 library(MRMCbinary)
+
 ## Load example data
 data(VanDyke)
 
@@ -64,8 +66,7 @@ reader_result <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatmen
 print(reader_result)
 summary(reader_result, digits = 3)
 
-# When comparing the sensitivities and specificities 
-#  between modalities and between readers together
+# When comparing the sensitivities and specificities between modalities and between readers together
 #  not considering interaction between modalities and readers
 both_result_wo_int <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
                                  Case = case, D = truth, Y = Y, effect = "Both",
@@ -74,8 +75,7 @@ both_result_wo_int <- MRMCbinary(data = VanDyke, Reader = reader, Modality = tre
 print(both_result_wo_int)
 summary(both_result_wo_int, digits = 3)
 
-# When comparing the sensitivities and specificities 
-#  between modalities and between readers together
+# When comparing the sensitivities and specificities between modalities and between readers together
 #  considering interaction between modalities and readers
 both_result_with_int <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
                                    Case = case, D = truth, Y = Y, effect = "Both",
