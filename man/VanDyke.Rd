@@ -24,7 +24,7 @@ Five-point ratings given to case images by the radiologists (i.e., diagnostic te
 }
 }
 \source{
-This data are available at \url{http://perception.radiology.uiowa.edu} and \url{https://github.com/brian-j-smith/MRMCaov/tree/master/data}.
+This data are available at \url{https://perception.lab.uiowa.edu} and \url{https://github.com/brian-j-smith/MRMCaov/tree/master/data}.
 }
 \usage{
 VanDyke

@@ -27,7 +27,7 @@
 #' @references
 #' Van Dyke, C. W., White, R. D., Obuchowski, N. A., Geisinger, M. A., Lorig, R. J., & Meziane, M. A. (1993). Cine MRI in the diagnosis of thoracic aortic dissection. 79th RSNA Meetings. *Chicago, IL*, 28.
 #'
-#' @source This data are available at <http://perception.radiology.uiowa.edu> and <https://github.com/brian-j-smith/MRMCaov/tree/master/data>.
+#' @source This data are available at <https://perception.lab.uiowa.edu> and <https://github.com/brian-j-smith/MRMCaov/tree/master/data>.
 #'
 #' @examples
 #' ## Load example data
