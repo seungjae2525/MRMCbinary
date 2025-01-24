@@ -85,23 +85,23 @@ summary.MRMCbinary <- function(object, digits = max(1L, getOption("digits") - 3L
     cat(paste0("Modality                        : ", as.character(x$args$Modality), "\n"))
     cat(paste0("Reader                          : ", as.character(x$args$Reader), "\n"))
     cat(paste0("Case                            : ", as.character(x$args$Case), "\n"))
-    cat(paste0("True disease status             : ", as.character(x$args$D), "\n"))
-    cat(paste0("Binary diagnostic test          : ", as.character(x$args$Y), "\n"))
+    cat(paste0("True disease status (D)         : ", as.character(x$args$D), "\n"))
+    cat(paste0("Binary diagnostic test (Y)      : ", as.character(x$args$Y), "\n"))
     cat(paste0("Reference for Modality variable : ", x$reference.Modality, "\n"))
     cat(paste0("Referecen for Reader variable   : ", x$reference.Reader, "\n"))
   } else if (x$effect == "Modality") {
     cat(paste0("Modality                        : ", as.character(x$args$Modality), "\n"))
     cat(paste0("Reader                          : ", as.character(x$args$Reader), "\n"))
     cat(paste0("Case                            : ", as.character(x$args$Case), "\n"))
-    cat(paste0("True disease status             : ", as.character(x$args$D), "\n"))
-    cat(paste0("Binary diagnostic test          : ", as.character(x$args$Y), "\n"))
+    cat(paste0("True disease status (D)         : ", as.character(x$args$D), "\n"))
+    cat(paste0("Binary diagnostic test (Y)      : ", as.character(x$args$Y), "\n"))
     cat(paste0("Reference for Modality variable : ", x$reference.Modality, "\n"))
   } else if (x$effect == "Reader") {
     cat(paste0("Modality                      : ", as.character(x$args$Modality), "\n"))
     cat(paste0("Reader                        : ", as.character(x$args$Reader), "\n"))
     cat(paste0("Case                          : ", as.character(x$args$Case), "\n"))
-    cat(paste0("True disease status           : ", as.character(x$args$D), "\n"))
-    cat(paste0("Binary diagnostic test        : ", as.character(x$args$Y), "\n"))
+    cat(paste0("True disease status (D)       : ", as.character(x$args$D), "\n"))
+    cat(paste0("Binary diagnostic test (Y)    : ", as.character(x$args$Y), "\n"))
     cat(paste0("Reference for Reader variable : ", x$reference.Reader, "\n"))
   }
   cat("\n")
@@ -109,8 +109,8 @@ summary.MRMCbinary <- function(object, digits = max(1L, getOption("digits") - 3L
   ## Analysis Description
   cat("###### 3. Analysis Description \n")
   if (x$effect == "Both") {
-    cat(paste0("Effect to compare             : Both (Modality effect and Reader effect) \n"))
-    cat(paste0("Use interaction term in model : ", x$interaction, "\n"))
+    cat(paste0("Effect to compare       : Both (Modality effect and Reader effect) \n"))
+    cat(paste0("Use of interaction term : ", x$interaction, "\n"))
   } else {
     cat(paste0("Effect to compare: ", x$effect, " effect \n"))
   }
