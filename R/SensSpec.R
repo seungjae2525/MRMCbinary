@@ -1,20 +1,20 @@
 #' @title Calculate sensitivity and specificity
 #'
-#' @description \code{SensSpec()} is the function that calculates overall sensitivity and specificity, modality specific sensitivity and specificity, and modality specific and reader specific sensitivity and specificity.
+#' @description \code{SensSpec()} is the function that calculates overall sensitivity and specificity, modality-specific sensitivity and specificity, and modality- and reader-specific sensitivity and specificity.
 #'
-#' @param data A data frame in which contains the modality identifiers (Modality), reader identifiers (Reader), case identifiers (Case), true disease status (D), and binary diagnostic test result (Y).
-#' @param Modality Variable of modality identifiers.
-#' @param Reader Variable of reader identifiers.
-#' @param Case Variable of case identifiers.
-#' @param D Variable of true disease status. It should be set the value to 1 for cases diseased and to 0 for those non-diseased.
-#' @param Y Variable of binary diagnostic test result. It should be set the value to 1 for cases diagnosed as positive and to 0 for those diagnosed as negative.
-#' @param percentage Whether to report results as decimals or percentage points. Default: FALSE.
-#' @param digits The number of significant digits. Default: max(1L, getOption("digits") - 3L).
+#' @param data A data frame in which contains the modality identifiers (\code{Modality}), the reader identifiers (\code{Reader}), the case identifiers (\code{Case}), the true disease status (\code{D}), and the binary diagnostic test result (\code{Y}).
+#' @param Modality Variable of the modality identifiers.
+#' @param Reader Variable of the reader identifiers.
+#' @param Case Variable of the case identifiers.
+#' @param D Variable of the true disease status. It should be set the value to 1 for cases diseased and to 0 for those non-diseased.
+#' @param Y Variable of the binary diagnostic test result. It should be set the value to 1 for cases diagnosed as positive and to 0 for those diagnosed as negative.
+#' @param percentage Whether to report results as decimals or percentage points. Default: \code{FALSE}.
+#' @param digits Number of significant digits. Default: \code{max(1L, getOption("digits") - 3L)}.
 #'
 #' @return An object of class \code{SensSpec}. The object is a data.frame with the following components:
 #' \item{Overall Result}{Overall sensitivity and specificity}
 #' \item{Modality-specific Result}{Modality-specific sensitivity and specificity}
-#' \item{Reader-specific Modality-specific Result}{Reader-specific and modality-specific sensitivity and specificity}
+#' \item{Reader-specific Modality-specific Result}{Modality- and reader-specific sensitivity and specificity}
 #' \item{digits}{The number of significant digits}
 #' The results for the \code{SensSpec} are printed with the \code{\link[MRMCbinary]{print.SensSpec}} function.
 #'

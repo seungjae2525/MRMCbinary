@@ -15,7 +15,7 @@
 Print the results for object of class \code{SensSpec}.
 }
 \details{
-Print the results for object (\code{SensSpec} of class \code{SensSpec}.
+Print the results for object of class \code{SensSpec}.
 }
 \examples{
 ## Load example data

@@ -1,7 +1,7 @@
 #' @title MRMCbinary: Multi-reader multi-case analysis of binary diagnostic tests
 #'
 #' @description
-#' R package \bold{MRMCbinary} is a package aimed at comparing the performance of diagnostic tests (i.e., sensitivity and specificity) for binary outcome in multi-reader multi-case (MRMC) study.
+#' R package \bold{MRMCbinary} is a package aimed at comparing the performance of diagnostic tests (i.e., sensitivity and specificity) for binary outcomes in multi-reader multi-case (MRMC) studies.
 #'
 #' @name MRMCbinary-package
 #'

@@ -5,7 +5,7 @@
 #' @param x An object for class \code{SensSpec}.
 #' @param ... Further arguments (currently not used).
 #'
-#' @details Print the results for object (\code{SensSpec} of class \code{SensSpec}.
+#' @details Print the results for object of class \code{SensSpec}.
 #'
 #' @examples
 #' ## Load example data

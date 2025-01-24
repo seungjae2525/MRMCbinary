@@ -16,32 +16,32 @@ SensSpec(
 )
 }
 \arguments{
-\item{data}{A data frame in which contains the modality identifiers (Modality), reader identifiers (Reader), case identifiers (Case), true disease status (D), and binary diagnostic test result (Y).}
+\item{data}{A data frame in which contains the modality identifiers (\code{Modality}), the reader identifiers (\code{Reader}), the case identifiers (\code{Case}), the true disease status (\code{D}), and the binary diagnostic test result (\code{Y}).}
 
-\item{Modality}{Variable of modality identifiers.}
+\item{Modality}{Variable of the modality identifiers.}
 
-\item{Reader}{Variable of reader identifiers.}
+\item{Reader}{Variable of the reader identifiers.}
 
-\item{Case}{Variable of case identifiers.}
+\item{Case}{Variable of the case identifiers.}
 
-\item{D}{Variable of true disease status. It should be set the value to 1 for cases diseased and to 0 for those non-diseased.}
+\item{D}{Variable of the true disease status. It should be set the value to 1 for cases diseased and to 0 for those non-diseased.}
 
-\item{Y}{Variable of binary diagnostic test result. It should be set the value to 1 for cases diagnosed as positive and to 0 for those diagnosed as negative.}
+\item{Y}{Variable of the binary diagnostic test result. It should be set the value to 1 for cases diagnosed as positive and to 0 for those diagnosed as negative.}
 
-\item{percentage}{Whether to report results as decimals or percentage points. Default: FALSE.}
+\item{percentage}{Whether to report results as decimals or percentage points. Default: \code{FALSE}.}
 
-\item{digits}{The number of significant digits. Default: max(1L, getOption("digits") - 3L).}
+\item{digits}{Number of significant digits. Default: \code{max(1L, getOption("digits") - 3L)}.}
 }
 \value{
 An object of class \code{SensSpec}. The object is a data.frame with the following components:
 \item{Overall Result}{Overall sensitivity and specificity}
 \item{Modality-specific Result}{Modality-specific sensitivity and specificity}
-\item{Reader-specific Modality-specific Result}{Reader-specific and modality-specific sensitivity and specificity}
+\item{Reader-specific Modality-specific Result}{Modality- and reader-specific sensitivity and specificity}
 \item{digits}{The number of significant digits}
 The results for the \code{SensSpec} are printed with the \code{\link[MRMCbinary]{print.SensSpec}} function.
 }
 \description{
-\code{SensSpec()} is the function that calculates overall sensitivity and specificity, modality specific sensitivity and specificity, and modality specific and reader specific sensitivity and specificity.
+\code{SensSpec()} is the function that calculates overall sensitivity and specificity, modality-specific sensitivity and specificity, and modality- and reader-specific sensitivity and specificity.
 }
 \examples{
 ## Load example data

@@ -3,55 +3,55 @@ MRMCbinary <- function(...) UseMethod("MRMCbinary")
 #' @title Multi-reader multi-case analysis of binary diagnostic tests
 #'
 #' @description \code{MRMCbinary()} is the main function of \code{MRMCbinary} package and
-#' can be used to compare sensitivity and specificity of diagnostic tests for binary outcome in multi-reader multi-case (MRMC) study.
+#' can be used to compare sensitivity and specificity of diagnostic tests for binary outcomes in multi-reader multi-case (MRMC) studies.
 #'
-#' @param data A data frame in which contains the modality identifiers (Modality), reader identifiers (Reader), case identifiers (Case), true disease status (D), and binary diagnostic test result (Y).
-#' @param Modality Variable of modality identifiers.
-#' @param Reader Variable of reader identifiers.
-#' @param Case Variable of case identifiers.
-#' @param D Variable of true disease status. It should be set the value to 1 for cases diseased and to 0 for those non-diseased.
-#' @param Y Variable of binary diagnostic test result. It should be set the value to 1 for cases diagnosed as positive and to 0 for those diagnosed as negative.
-#' @param effect Effect one wants to evaluate (one of "Modality", "Reader", and "Both"). See details.
-#' @param interaction If one want to evaluate the interaction effect between modality and reader, interaction = "TRUE", otherwise "FALSE". Specify only when effect is "Both". Default: NULL. See details.
-#' @param reference.Modality Reference in Variable of modality identifiers.
-#' @param reference.Reader Reference in Variable of reader identifiers.
+#' @param data A data frame in which contains the modality identifiers (\code{Modality}), the reader identifiers (\code{Reader}), the case identifiers (\code{Case}), the true disease status (\code{D}), and the binary diagnostic test result (\code{Y}).
+#' @param Modality Variable of the modality identifiers.
+#' @param Reader Variable of the reader identifiers.
+#' @param Case Variable of the case identifiers.
+#' @param D Variable of the true disease status. It should be set the value to 1 for cases diseased and to 0 for those non-diseased.
+#' @param Y Variable of the binary diagnostic test result. It should be set the value to 1 for cases diagnosed as positive and to 0 for those diagnosed as negative.
+#' @param effect Effect to compare sensitivity and specificity (one of \code{"Modality"}, \code{"Reader"}, and \code{"Both"}). See \bold{Details}.
+#' @param interaction When evaluating the interaction effect between modality and reader, \code{interaction = TRUE}, otherwise \code{interaction = FALSE}. Specify only when \code{effect} is \code{"Both"}. Default: \code{NULL}. See \bold{Details}.
+#' @param reference.Modality Reference in variable of the modality identifiers.
+#' @param reference.Reader Reference in variable of the reader identifiers.
 #'
 #' @return An object of class \code{MRMCbinary}. The object is a data.frame with the following components:
 #' \item{CLR_sen}{Conditional logistic regression results for sensitivity.}
 #' \item{CLR_LRT_sen}{Likelihood ratio test from the conditional logistic regression results for sensitivity.}
 #' \item{CLR_Score_sen}{Score test from the conditional logistic regression results for sensitivity.}
 #' \item{CLR_Wald_sen}{Wald test from the conditional logistic regression results for sensitivity.}
-#' \item{Q_MN_sen}{Cochran's Q test (when the number of modalities is greater than 2) or McNemar's test (when the number of modalities is equal to 2) result for sensitivity. This is only reported if (1) effect = "Modality", (2) effect = "Reader", or (3) effect = "Both" and interaction = TRUE.}
+#' \item{Q_MN_sen}{Cochran's Q test (when the number of modalities is greater than 2) or McNemar's test (when the number of modalities is equal to 2) result for sensitivity. This is only reported if (1) \code{effect = "Modality"}, (2) \code{effect = "Reader"}, or (3) \code{effect = "Both"} and \code{interaction = TRUE}.}
 #' \item{CLR_spe}{Conditional logistic regression results for specificity.}
 #' \item{CLR_LRT_spe}{Likelihood ratio test from the conditional logistic regression results for specificity.}
 #' \item{CLR_Score_spe}{Score test from the conditional logistic regression results for specificity.}
 #' \item{CLR_Wald_spe}{Wald test from the conditional logistic regression results for specificity.}
-#' \item{Q_MN_spe}{Cochran's Q test (when the number of modalities is greater than 2) or McNemar's test (when the number of modalities is equal to 2) result for specificity. This is only reported if (1) effect = "Modality", (2) effect = "Reader", or (3) effect = "Both" and interaction = TRUE.}
+#' \item{Q_MN_spe}{Cochran's Q test (when the number of modalities is greater than 2) or McNemar's test (when the number of modalities is equal to 2) result for specificity. This is only reported if (1) \code{effect = "Modality"}, (2) \code{effect = "Reader"}, or (3) \code{effect = "Both"} and \code{interaction = TRUE}.}
 #' \item{formula}{Formula used in the conditional logistic regression.}
-#' \item{args}{List of arguments used in MRMCbinary function.}
+#' \item{args}{List of arguments used in the \code{MRMCbinary} function.}
 #' \item{n.modality}{Total number of modalities.}
 #' \item{n.reader}{Total number of readers.}
 #' \item{n.case}{Total number of cases.}
-#' \item{effect}{Effect one wants to evaluate.}
-#' \item{interaction}{This is only reported if effect = "Both". If one want to evaluate the interaction effect between modality and reader in the conditional logistic regression, interaction = "TRUE", otherwise "FALSE".}
-#' \item{reference.Modality}{Reference in variable of modality identifiers.}
-#' \item{reference.Reader}{Reference in variable of reader identifiers.}
+#' \item{effect}{Effect to compare sensitivity and specificity.}
+#' \item{interaction}{This is only included in the \code{MRMCbinary} object when \code{effect = "Both"}. If one want to evaluate the interaction effect between modality and reader in the conditional logistic regression, \code{interaction = TRUE}, otherwise \code{interaction = FALSE}.}
+#' \item{reference.Modality}{Reference in variable of the modality identifiers.}
+#' \item{reference.Reader}{Reference in variable of the reader identifiers.}
 #' The results for the \code{MRMCbinary} are printed with the \code{\link[MRMCbinary]{print.MRMCbinary}} function.
 #' Also, the results for the \code{MRMCbinary} are summarized with the \code{\link[MRMCbinary]{summary.MRMCbinary}} function.
 #'
 #' @details There are three effects that can be evaluated:
 #'
-#'   * effect = "Modality": This is used when the goal is to exclusively evaluate the effect of multiple modalities.
-#'   And, Cochran's Q test (when the number of modalities is greater than 2) or McNemar's test (when the number of modalities is equal to 2) result are reported.
-#'   When effect = "Modality", "interaction" must be set to NULL.
-#'   * effect = "Reader": This is used when the goal is to exclusively evaluate the effect of multiple readers.
-#'   And, Cochran's Q test (when the number of modalities is greater than 2) or McNemar's test (when the number of modalities is equal to 2) result are reported.
-#'   When effect = "Reader", "interaction" must be set to NULL.
-#'   * effect = "Both": This is used when the goal is to simultaneously evaluate the effect of multiple modalities and multiple readers.
-#'   In this case, "interaction" must be specified (TRUE or FALSE).
-#'   If one want to evaluate the interaction effect between modality and reader in the conditional logistic regression, interaction = "TRUE", otherwise "FALSE".
-#'   When interaction = "TRUE", Cochran's Q test (when the number of modalities is greater than 2) or McNemar's test (when the number of modalities is equal to 2) result are reported.
-#'   However, when interaction = "FASLE", Cochran's Q test or McNemar's test result are not reported.
+#'   * \code{effect = "Modality"}: This is used when the goal is to exclusively evaluate the effects of multiple modalities.
+#'   And, Cochran's Q test (when the number of modalities is greater than 2) or McNemar's test (when the number of modalities is equal to 2) result is reported.
+#'   When \code{effect = "Modality"}, \code{interaction} must be set to NULL.
+#'   * \code{effect = "Reader"}: This is used when the goal is to exclusively evaluate the effects of multiple readers.
+#'   And, Cochran's Q test (when the number of modalities is greater than 2) or McNemar's test (when the number of modalities is equal to 2) result is reported.
+#'   When \code{effect = "Reader"}, \code{interaction} must be set to NULL.
+#'   * \code{effect = "Both"}: This is used when the goal is to simultaneously evaluate the effects of multiple modalities and multiple readers.
+#'   In this case, \code{interaction} must be specified (TRUE or FALSE).
+#'   If one want to evaluate the interaction effect between modality and reader in the conditional logistic regression, set \code{interaction = TRUE}, otherwise \code{interaction = FALSE}.
+#'   When \code{interaction = TRUE}, Cochran's Q test result is reported.
+#'   However, when \code{interaction = FALSE}, Cochran's Q test or McNemar's test result is not reported.
 #'
 #' See Lee et al. (2025) for details.
 #'

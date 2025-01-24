@@ -5,7 +5,7 @@
 #' @param x An object for class \code{MRMCbinary}.
 #' @param ... Further arguments (currently not used).
 #'
-#' @details Print the results for object of class \code{MRMCbinary}).
+#' @details Print the results for object of class \code{MRMCbinary}.
 #' In the conditional logistic regression results, "Estimate" corresponds to the log odds ratio and "SE" corresponds to the standard error of the log odds ratio.
 #'
 #' @examples

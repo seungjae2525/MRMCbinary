@@ -9,7 +9,7 @@
 \arguments{
 \item{object}{An object for class \code{MRMCbinary}.}
 
-\item{digits}{Summary digits. Default: max(1L, getOption("digits") - 3L).}
+\item{digits}{Number of significant digits. Default: \code{max(1L, getOption("digits") - 3L)}.}
 
 \item{...}{Further arguments (currently not used).}
 }

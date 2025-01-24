@@ -3,7 +3,7 @@
 #' @description Summary the results for object of class \code{MRMCbinary}.
 #'
 #' @param object An object for class \code{MRMCbinary}.
-#' @param digits Summary digits. Default: max(1L, getOption("digits") - 3L).
+#' @param digits Number of significant digits. Default: \code{max(1L, getOption("digits") - 3L)}.
 #' @param ... Further arguments (currently not used).
 #'
 #' @details Summary the results for object of class \code{MRMCbinary}.
