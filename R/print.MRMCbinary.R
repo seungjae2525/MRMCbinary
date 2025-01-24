@@ -15,41 +15,43 @@
 #' ## Return the first parts of an object
 #' head(VanDyke)
 #'
-#' ## See unique readers
-#' unique(VanDyke$reader)
-#'
-#' ## See unique modalities
+#' ## Extract unique modalities
 #' unique(VanDyke$treatment)
+#'
+#' ## Extract Unique readers
+#' unique(VanDyke$reader)
 #'
 #' ## Create binary test results (Y_ijk)
 #' VanDyke$Y <- as.numeric(VanDyke$rating >= 3)
 #'
 #' ## Example usage of MRMCbinary function:
 #' # When comparing the sensitivities and specificities between modalities
-#' modality_result <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
+#' modality_result <- MRMCbinary(data = VanDyke, Modality = treatment, Reader = reader,
 #'                               Case = case, D = truth, Y = Y, effect = "Modality",
 #'                               interaction = NULL,
-#'                               reference.Modality = "1", reference.Reader = "1")
+#'                               reference.Modality = "1", reference.Reader = NULL)
 #' print(modality_result)
 #'
 #' # When comparing the sensitivities and specificities between readers
-#' reader_result <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
+#' reader_result <- MRMCbinary(data = VanDyke, Modality = treatment, Reader = reader,
 #'                             Case = case, D = truth, Y = Y, effect = "Reader",
 #'                             interaction = NULL,
-#'                             reference.Modality = "1", reference.Reader = "1")
+#'                             reference.Modality = NULL, reference.Reader = "1")
 #' print(reader_result)
 #'
-#' # When comparing the sensitivities and specificities between modalities and between readers together
+#' # When comparing the sensitivities and specificities
+#' #  between modalities and between readers together
 #' #  not considering interaction between modalities and readers
-#' both_result_wo_int <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
+#' both_result_wo_int <- MRMCbinary(data = VanDyke, Modality = treatment, Reader = reader,
 #'                                  Case = case, D = truth, Y = Y, effect = "Both",
 #'                                  interaction = FALSE,
 #'                                  reference.Modality = "1", reference.Reader = "1")
 #' print(both_result_wo_int)
 #'
-#' # When comparing the sensitivities and specificities between modalities and between readers together
+#' # When comparing the sensitivities and specificities
+#' #  between modalities and between readers together
 #' #  considering interaction between modalities and readers
-#' both_result_with_int <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
+#' both_result_with_int <- MRMCbinary(data = VanDyke, Modality = treatment, Reader = reader,
 #'                                    Case = case, D = truth, Y = Y, effect = "Both",
 #'                                    interaction = TRUE,
 #'                                    reference.Modality = "1", reference.Reader = "1")
@@ -95,19 +97,7 @@ print.MRMCbinary <- function(x, ...) {
       base::print(x$CLR_Wald_sen)
       cat("\n")
 
-      if (x$effect == "Modality") {
-        if (x$n.modality == 2) {
-          cat("McNemar's test: \n")
-        } else {
-          cat("Cochran's Q test: \n")
-        }
-      } else if (x$effect == "Reader") {
-        if (x$n.reader == 2) {
-          cat("McNemar's test: \n")
-        } else {
-          cat("Cochran's Q test: \n")
-        }
-      }
+      cat("Cochran's Q test: \n")
       base::print(x$Q_MN_sen)
       cat("\n\n")
 
@@ -133,21 +123,10 @@ print.MRMCbinary <- function(x, ...) {
       base::print(x$CLR_Wald_spe)
       cat("\n")
 
-      if (x$effect == "Modality") {
-        if (x$n.modality == 2) {
-          cat("McNemar's test: \n")
-        } else {
-          cat("Cochran's Q test: \n")
-        }
-      } else if (x$effect == "Reader") {
-        if (x$n.reader == 2) {
-          cat("McNemar's test: \n")
-        } else {
-          cat("Cochran's Q test: \n")
-        }
-      }
+      cat("Cochran's Q test: \n")
       base::print(x$Q_MN_spe)
       cat("\n")
+
     } else {
 
       ############################################################################

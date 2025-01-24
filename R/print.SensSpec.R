@@ -1,11 +1,11 @@
-#' @title Print for \code{MRMCbinary} objects
+#' @title Print for \code{SensSpec} objects
 #'
-#' @description Print the results for object of class \code{MRMCbinary}.
+#' @description Print the results for object of class \code{SensSpec}.
 #'
-#' @param x An object for class \code{MRMCbinary}.
+#' @param x An object for class \code{SensSpec}.
 #' @param ... Further arguments (currently not used).
 #'
-#' @details Print the results for object (\code{MRMCbinary} of class \code{MRMCbinary}.
+#' @details Print the results for object (\code{SensSpec} of class \code{SensSpec}.
 #'
 #' @examples
 #' ## Load example data
@@ -14,20 +14,26 @@
 #' ## Return the first parts of an object
 #' head(VanDyke)
 #'
-#' ## Extract Unique readers
-#' unique(VanDyke$reader)
-#'
 #' ## Extract unique modalities
 #' unique(VanDyke$treatment)
+#'
+#' ## Extract Unique readers
+#' unique(VanDyke$reader)
 #'
 #' ## Create binary test results (Y_ijk)
 #' VanDyke$Y <- as.numeric(VanDyke$rating >= 3)
 #'
 #' ## Example usage of SensSpec function:
-#' senspe_result <- SensSpec(data = VanDyke, Reader = reader,
-#'                           Modality = treatment, Case = case,
-#'                           D = truth, Y = Y, digits = 3)
-#' print(senspe_result)
+#' senspe_result1 <- SensSpec(data = VanDyke, Modality = treatment,
+#'                            Reader = reader, Case = case,
+#'                            D = truth, Y = Y, percentage = FALSE, digits = 3)
+#' print(senspe_result1)
+#'
+#' # Report results as percentage points
+#' senspe_result2 <- SensSpec(data = VanDyke, Modality = treatment,
+#'                            Reader = reader, Case = case,
+#'                            D = truth, Y = Y, percentage = TRUE, digits = 1)
+#' print(senspe_result2)
 #'
 #' @keywords print
 #'
@@ -37,6 +43,9 @@
 #' @export
 
 print.SensSpec <- function (x, ...){
+  Modalities <- x$Modalities
+  Readers <- x$Readers
+
   n_K <- nrow(x$`Modality-specific Result`)
   n_J <- nrow(x$`Reader-specific Modality-specific Result`)/n_K
 
@@ -54,6 +63,17 @@ print.SensSpec <- function (x, ...){
   xx3 <- x$`Reader-specific Modality-specific Result`
   xx3_digits_sen <- abs(nchar(xx3$Sensitivity)[1] - 11)
   xx3_digits_spe <- abs(nchar(xx3$Specificity)[1] - 11)
+
+  ## Newly define Modality and Reader name
+  cat("\n")
+  cat("Modalities are newly defined as follows (original name --> reported name):")
+  cat("\n")
+  cat(paste0(Modalities, " --> ", paste0("Modality", 1:n_K), collapse = "; "))
+  cat("\n\n")
+  cat("Readers are newly defined as follows (original name --> reported name):")
+  cat("\n")
+  cat(paste0(Readers, " --> ", paste0("Readers", 1:n_J), collapse = "; "))
+  cat("\n")
 
   ## Overall
   rownames(xx1) <- ""
@@ -78,10 +98,10 @@ print.SensSpec <- function (x, ...){
   cat("\n")
   cat("Modality-specific Results: \n")
 
-  for (jj in 1:n_J) {
+  for (jj in Readers) {
     xx3_temp <- xx3[xx3$Reader == jj, ]
 
-    cat(paste0("For Reader", jj, ":"), "\n")
+    cat(paste0("For Reader = ", jj, ":"), "\n")
     xx3_tempsenspe <- data.frame(matrix(c(xx3_temp$Sensitivity, "   |   ", xx3_temp$Specificity), ncol=c(n_K+1+n_K)))
     xx3_tempsenspe <- rbind(c(paste0("Modality", 1:n_K), "   |   ", paste0("Modality", 1:n_K)), xx3_tempsenspe)
     colnames(xx3_tempsenspe) <- c(paste0("Sensitivity", paste(rep(" ", xx3_digits_sen), collapse = "")), rep("", n_K - 1), "   |   ",

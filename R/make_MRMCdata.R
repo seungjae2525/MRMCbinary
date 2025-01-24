@@ -1,14 +1,14 @@
 make_MRMCdata <- function(data, args, effect) {
   ##
-  dat <- data.frame(Reader=data[[as.character(args$Reader)]],
-                    Modality=data[[as.character(args$Modality)]],
+  dat <- data.frame(Modality=data[[as.character(args$Modality)]],
+                    Reader=data[[as.character(args$Reader)]],
                     Case=data[[as.character(args$Case)]],
                     D=data[[as.character(args$D)]],
                     Y=data[[as.character(args$Y)]])
 
   ## Change variables to factor variables
-  dat$Reader <- factor(dat$Reader)
   dat$Modality <- factor(dat$Modality)
+  dat$Reader <- factor(dat$Reader)
   dat$Case <- factor(dat$Case)
 
   ## Extract unique values for Reader and Modality

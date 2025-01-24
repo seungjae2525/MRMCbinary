@@ -2,20 +2,20 @@
 % Please edit documentation in R/print.SensSpec.R
 \name{print.SensSpec}
 \alias{print.SensSpec}
-\title{Print for \code{MRMCbinary} objects}
+\title{Print for \code{SensSpec} objects}
 \usage{
 \method{print}{SensSpec}(x, ...)
 }
 \arguments{
-\item{x}{An object for class \code{MRMCbinary}.}
+\item{x}{An object for class \code{SensSpec}.}
 
 \item{...}{Further arguments (currently not used).}
 }
 \description{
-Print the results for object of class \code{MRMCbinary}.
+Print the results for object of class \code{SensSpec}.
 }
 \details{
-Print the results for object (\code{MRMCbinary} of class \code{MRMCbinary}.
+Print the results for object (\code{SensSpec} of class \code{SensSpec}.
 }
 \examples{
 ## Load example data
@@ -24,20 +24,26 @@ data(VanDyke)
 ## Return the first parts of an object
 head(VanDyke)
 
-## Extract Unique readers
-unique(VanDyke$reader)
-
 ## Extract unique modalities
 unique(VanDyke$treatment)
+
+## Extract Unique readers
+unique(VanDyke$reader)
 
 ## Create binary test results (Y_ijk)
 VanDyke$Y <- as.numeric(VanDyke$rating >= 3)
 
 ## Example usage of SensSpec function:
-senspe_result <- SensSpec(data = VanDyke, Reader = reader,
-                          Modality = treatment, Case = case,
-                          D = truth, Y = Y, digits = 3)
-print(senspe_result)
+senspe_result1 <- SensSpec(data = VanDyke, Modality = treatment,
+                           Reader = reader, Case = case,
+                           D = truth, Y = Y, percentage = FALSE, digits = 3)
+print(senspe_result1)
+
+# Report results as percentage points
+senspe_result2 <- SensSpec(data = VanDyke, Modality = treatment,
+                           Reader = reader, Case = case,
+                           D = truth, Y = Y, percentage = TRUE, digits = 1)
+print(senspe_result2)
 
 }
 \seealso{

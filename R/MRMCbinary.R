@@ -5,9 +5,9 @@ MRMCbinary <- function(...) UseMethod("MRMCbinary")
 #' @description \code{MRMCbinary()} is the main function of \code{MRMCbinary} package and
 #' can be used to compare sensitivity and specificity of diagnostic tests for binary outcome in multi-reader multi-case (MRMC) study.
 #'
-#' @param data A data frame in which contains the reader identifiers (Reader), modality identifiers (Modality), case identifiers (Case), true disease status (D), and binary diagnostic test result (Y).
-#' @param Reader Variable of reader identifiers.
+#' @param data A data frame in which contains the modality identifiers (Modality), reader identifiers (Reader), case identifiers (Case), true disease status (D), and binary diagnostic test result (Y).
 #' @param Modality Variable of modality identifiers.
+#' @param Reader Variable of reader identifiers.
 #' @param Case Variable of case identifiers.
 #' @param D Variable of true disease status. It should be set the value to 1 for cases diseased and to 0 for those non-diseased.
 #' @param Y Variable of binary diagnostic test result. It should be set the value to 1 for cases diagnosed as positive and to 0 for those diagnosed as negative.
@@ -28,8 +28,10 @@ MRMCbinary <- function(...) UseMethod("MRMCbinary")
 #' \item{CLR_Wald_spe}{Wald test from the conditional logistic regression results for specificity.}
 #' \item{Q_MN_spe}{Cochran's Q test (when the number of modalities is greater than 2) or McNemar's test (when the number of modalities is equal to 2) result for specificity. This is only reported if (1) effect = "Modality", (2) effect = "Reader", or (3) effect = "Both" and interaction = TRUE.}
 #' \item{formula}{Formula used in the conditional logistic regression.}
-#' \item{n.reader}{Total number of readers.}
+#' \item{args}{List of arguments used in MRMCbinary function.}
 #' \item{n.modality}{Total number of modalities.}
+#' \item{n.reader}{Total number of readers.}
+#' \item{n.case}{Total number of cases.}
 #' \item{effect}{Effect one wants to evaluate.}
 #' \item{interaction}{This is only reported if effect = "Both". If one want to evaluate the interaction effect between modality and reader in the conditional logistic regression, interaction = "TRUE", otherwise "FALSE".}
 #' \item{reference.Modality}{Reference in variable of modality identifiers.}
@@ -71,27 +73,29 @@ MRMCbinary <- function(...) UseMethod("MRMCbinary")
 #'
 #' ## Example usage of MRMCbinary function:
 #' # When comparing the sensitivities and specificities between modalities
-#' modality_result <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
+#' modality_result <- MRMCbinary(data = VanDyke, Modality = treatment, Reader = reader,
 #'                               Case = case, D = truth, Y = Y, effect = "Modality",
 #'                               interaction = NULL,
-#'                               reference.Modality = "1", reference.Reader = "1")
+#'                               reference.Modality = "1", reference.Reader = NULL)
 #'
 #' # When comparing the sensitivities and specificities between readers
-#' reader_result <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
+#' reader_result <- MRMCbinary(data = VanDyke, Modality = treatment, Reader = reader,
 #'                             Case = case, D = truth, Y = Y, effect = "Reader",
 #'                             interaction = NULL,
-#'                             reference.Modality = "1", reference.Reader = "1")
+#'                             reference.Modality = NULL, reference.Reader = "1")
 #'
-#' # When comparing the sensitivities and specificities between modalities and between readers together
+#' # When comparing the sensitivities and specificities
+#' #  between modalities and between readers together
 #' #  not considering interaction between modalities and readers
-#' both_result_wo_int <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
+#' both_result_wo_int <- MRMCbinary(data = VanDyke, Modality = treatment, Reader = reader,
 #'                                  Case = case, D = truth, Y = Y, effect = "Both",
 #'                                  interaction = FALSE,
 #'                                  reference.Modality = "1", reference.Reader = "1")
 #'
-#' # When comparing the sensitivities and specificities between modalities and between readers together
+#' # When comparing the sensitivities and specificities
+#' #  between modalities and between readers together
 #' #  considering interaction between modalities and readers
-#' both_result_with_int <- MRMCbinary(data = VanDyke, Reader = reader, Modality = treatment,
+#' both_result_with_int <- MRMCbinary(data = VanDyke, Modality = treatment, Reader = reader,
 #'                                    Case = case, D = truth, Y = Y, effect = "Both",
 #'                                    interaction = TRUE,
 #'                                    reference.Modality = "1", reference.Reader = "1")
@@ -106,20 +110,20 @@ MRMCbinary <- function(...) UseMethod("MRMCbinary")
 #'
 #' @export
 
-MRMCbinary <- function(data, Reader, Modality, Case, D, Y, effect,
+MRMCbinary <- function(data, Modality, Reader, Case, D, Y, effect,
                        interaction = NULL,
                        reference.Modality = NULL, reference.Reader = NULL) {
   ## List of arguments for MRMCbinary function
-  args <- eval(substitute(alist(Reader = Reader, Modality = Modality, Case = Case, D = D, Y = Y)))
+  args <- eval(substitute(alist(Modality = Modality, Reader = Reader, Case = Case, D = D, Y = Y)))
 
   ## Check if "args" is included in the column name of data!
   `%notin%` <- function(x, y) !(x %in% y)
 
-  if (as.character(args$Reader) %notin% colnames(data)) {
-    stop("\n Error: Reader variable must be included in data.")
-  }
   if (as.character(args$Modality) %notin% colnames(data)) {
     stop("\n Error: Modality variable must be included in data.")
+  }
+  if (as.character(args$Reader) %notin% colnames(data)) {
+    stop("\n Error: Reader variable must be included in data.")
   }
   if (as.character(args$Case) %notin% colnames(data)) {
     stop("\n Error: Case variable must be included in data.")
@@ -137,44 +141,62 @@ MRMCbinary <- function(data, Reader, Modality, Case, D, Y, effect,
     stop("\n Error: Diagnostic test result variable (i.e., Y) should be set the value to 1 for cases diagnosed as positive and to 0 for those diagnosed as negative.")
   }
 
-  ## Extract unique values for Reader and Modality
-  Cases <- unique(data[[as.character(args$Case)]])
-  Readers <- unique(data[[as.character(args$Reader)]])
+  ## Extract unique values for Modality, Reader, and Case
   Modalities <- unique(data[[as.character(args$Modality)]])
+  Readers <- unique(data[[as.character(args$Reader)]])
+  Cases <- unique(data[[as.character(args$Case)]])
 
   ## Date check!
   # Fully crossed MRMC ?
-  if (length(Readers) * length(Modalities) * length(Cases) != nrow(data)) {
+  if (length(Modalities) * length(Readers) * length(Cases) != nrow(data)) {
     stop("\n Error: The current data are not from a fully crossed MRMC study.")
-  }
-  # Number of readers >= 2 ?
-  if (length(Readers) < 2) {
-    stop("\n Error: The number of readers must be greater than or equal to 2.")
   }
   # Number of modalities >= 2 ?
   if (length(Modalities) < 2) {
     stop("\n Error: The number of modalities must be greater than or equal to 2.")
   }
-  # When reference.Reader is NULL
-  if (is.null(reference.Reader)) {
-    warning(paste0("\"reference.Reader\" is NULL. \"reference.Reader\" is set to the first reader (i.e., ", Readers[1], ")."))
-    reference.Reader <- Readers[1]
-  }
-  # Is reference.Reader a value contained in the Reader variable?
-  if (reference.Reader %notin% Readers) {
-    stop("\n Error: Reference of Reader variable must be included in data.")
-  }
-  # When reference.Modality is NULL
-  if (is.null(reference.Modality)) {
-    warning(paste0("\"reference.Modality\" is NULL. \"reference.Modality\" is set to the first modality (i.e., ", Modalities[1], ")."))
-    reference.Modality <- Modalities[1]
-  }
-  # Is reference.Modality a value contained in the Modality variable?
-  if (reference.Modality %notin% Modalities) {
-    stop("\n Error: Reference of Modality variable must be included in data.")
+  # Number of readers >= 2 ?
+  if (length(Readers) < 2) {
+    stop("\n Error: The number of readers must be greater than or equal to 2.")
   }
 
-  ## Warnings
+  ## Warnings when effect = "Modality"
+  if (effect == "Modality") {
+    if (!is.null(reference.Reader)) {
+      warning(paste0("If effect = \"Modality\", then \"reference.Reader\" is not used. \"reference.Reader\" is set to NULL."))
+      reference.Reader <- NULL
+    }
+
+    # When reference.Modality is NULL
+    if (is.null(reference.Modality)) {
+      warning(paste0("\"reference.Modality\" is NULL. \"reference.Modality\" is set to the first modality (i.e., ", Modalities[1], ")."))
+      reference.Modality <- Modalities[1]
+    }
+    # Is reference.Modality a value contained in the Modality variable?
+    if (reference.Modality %notin% Modalities) {
+      stop("\n Error: Reference of Modality variable must be included in data.")
+    }
+  }
+
+  ## Warnings when effect = "Reader"
+  if (effect == "Reader") {
+    if (!is.null(reference.Modality)) {
+      warning(paste0("If effect = \"Reader\", then \"reference.Modality\" is not used. \"reference.Modality\" is set to NULL."))
+      reference.Modality <- NULL
+    }
+
+    # When reference.Reader is NULL
+    if (is.null(reference.Reader)) {
+      warning(paste0("\"reference.Reader\" is NULL. \"reference.Reader\" is set to the first reader (i.e., ", Readers[1], ")."))
+      reference.Reader <- Readers[1]
+    }
+    # Is reference.Reader a value contained in the Reader variable?
+    if (reference.Reader %notin% Readers) {
+      stop("\n Error: Reference of Reader variable must be included in data.")
+    }
+  }
+
+  ## For interaction
   if (effect %in% c("Modality", "Reader") & !is.null(interaction)) {
     warning("If \"effect\" is \"Modality\" or \"Reader\", then \"interaction\" sholud be NULL.")
     interaction <- NULL
@@ -267,8 +289,10 @@ MRMCbinary <- function(data, Reader, Modality, Case, D, Y, effect,
   }
 
   #
-  Final_result$n.reader <- length(Readers)
+  Final_result$args <- args
   Final_result$n.modality <- length(Modalities)
+  Final_result$n.reader <- length(Readers)
+  Final_result$n.case <- length(Cases)
   Final_result$effect <- effect
   Final_result$interaction <- interaction
   Final_result$reference.Modality <- reference.Modality

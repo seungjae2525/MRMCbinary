@@ -6,8 +6,8 @@
 \usage{
 SensSpec(
   data,
-  Reader,
   Modality,
+  Reader,
   Case,
   D,
   Y,
@@ -16,11 +16,11 @@ SensSpec(
 )
 }
 \arguments{
-\item{data}{A data frame in which contains the reader identifiers (Reader), modality identifiers (Modality), case identifiers (Case), true disease status (D), and binary diagnostic test result (Y).}
-
-\item{Reader}{Variable of reader identifiers.}
+\item{data}{A data frame in which contains the modality identifiers (Modality), reader identifiers (Reader), case identifiers (Case), true disease status (D), and binary diagnostic test result (Y).}
 
 \item{Modality}{Variable of modality identifiers.}
+
+\item{Reader}{Variable of reader identifiers.}
 
 \item{Case}{Variable of case identifiers.}
 
@@ -50,24 +50,24 @@ data(VanDyke)
 ## Return the first parts of an object
 head(VanDyke)
 
-## Extract Unique readers
-unique(VanDyke$reader)
-
 ## Extract unique modalities
 unique(VanDyke$treatment)
+
+## Extract Unique readers
+unique(VanDyke$reader)
 
 ## Create binary test results (Y_ijk)
 VanDyke$Y <- as.numeric(VanDyke$rating >= 3)
 
 ## Example usage of SensSpec function:
 # Report results as decimals
-senspe_result1 <- SensSpec(data = VanDyke, Reader = reader,
-                           Modality = treatment, Case = case,
+senspe_result1 <- SensSpec(data = VanDyke, Modality = treatment,
+                           Reader = reader, Case = case,
                            D = truth, Y = Y, percentage = FALSE, digits = 3)
 
 # Report results as percentage points
-senspe_result2 <- SensSpec(data = VanDyke, Reader = reader,
-                           Modality = treatment, Case = case,
+senspe_result2 <- SensSpec(data = VanDyke, Modality = treatment,
+                           Reader = reader, Case = case,
                            D = truth, Y = Y, percentage = TRUE, digits = 1)
 
 }

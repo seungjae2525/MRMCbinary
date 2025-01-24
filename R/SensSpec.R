@@ -2,9 +2,9 @@
 #'
 #' @description \code{SensSpec()} is the function that calculates overall sensitivity and specificity, modality specific sensitivity and specificity, and modality specific and reader specific sensitivity and specificity.
 #'
-#' @param data A data frame in which contains the reader identifiers (Reader), modality identifiers (Modality), case identifiers (Case), true disease status (D), and binary diagnostic test result (Y).
-#' @param Reader Variable of reader identifiers.
+#' @param data A data frame in which contains the modality identifiers (Modality), reader identifiers (Reader), case identifiers (Case), true disease status (D), and binary diagnostic test result (Y).
 #' @param Modality Variable of modality identifiers.
+#' @param Reader Variable of reader identifiers.
 #' @param Case Variable of case identifiers.
 #' @param D Variable of true disease status. It should be set the value to 1 for cases diseased and to 0 for those non-diseased.
 #' @param Y Variable of binary diagnostic test result. It should be set the value to 1 for cases diagnosed as positive and to 0 for those diagnosed as negative.
@@ -25,24 +25,24 @@
 #' ## Return the first parts of an object
 #' head(VanDyke)
 #'
-#' ## Extract Unique readers
-#' unique(VanDyke$reader)
-#'
 #' ## Extract unique modalities
 #' unique(VanDyke$treatment)
+#'
+#' ## Extract Unique readers
+#' unique(VanDyke$reader)
 #'
 #' ## Create binary test results (Y_ijk)
 #' VanDyke$Y <- as.numeric(VanDyke$rating >= 3)
 #'
 #' ## Example usage of SensSpec function:
 #' # Report results as decimals
-#' senspe_result1 <- SensSpec(data = VanDyke, Reader = reader,
-#'                            Modality = treatment, Case = case,
+#' senspe_result1 <- SensSpec(data = VanDyke, Modality = treatment,
+#'                            Reader = reader, Case = case,
 #'                            D = truth, Y = Y, percentage = FALSE, digits = 3)
 #'
 #' # Report results as percentage points
-#' senspe_result2 <- SensSpec(data = VanDyke, Reader = reader,
-#'                            Modality = treatment, Case = case,
+#' senspe_result2 <- SensSpec(data = VanDyke, Modality = treatment,
+#'                            Reader = reader, Case = case,
 #'                            D = truth, Y = Y, percentage = TRUE, digits = 1)
 #'
 #' @seealso
@@ -55,20 +55,20 @@
 #'
 #' @export
 
-SensSpec <- function(data, Reader, Modality, Case, D, Y,
+SensSpec <- function(data, Modality, Reader, Case, D, Y,
                      percentage=FALSE,
                      digits = max(1L, getOption("digits") - 3L)) {
   ## List of arguments for SensSpec function
-  args <- eval(substitute(alist(Reader = Reader, Modality = Modality, Case = Case, D = D, Y = Y)))
+  args <- eval(substitute(alist(Modality = Modality, Reader = Reader, Case = Case, D = D, Y = Y)))
 
   ## Check if "args" is included in the column name of data!
   `%notin%` <- function(x, y) !(x %in% y)
 
-  if (as.character(args$Reader) %notin% colnames(data)) {
-    stop("\n Error: Reader variable must be included in data.")
-  }
   if (as.character(args$Modality) %notin% colnames(data)) {
     stop("\n Error: Modality variable must be included in data.")
+  }
+  if (as.character(args$Reader) %notin% colnames(data)) {
+    stop("\n Error: Reader variable must be included in data.")
   }
   if (as.character(args$Case) %notin% colnames(data)) {
     stop("\n Error: Case variable must be included in data.")
@@ -86,17 +86,17 @@ SensSpec <- function(data, Reader, Modality, Case, D, Y,
     stop("\n Error: Diagnostic test result variable (i.e., Y) should be set the value to 1 for cases diagnosed as positive and to 0 for those diagnosed as negative.")
   }
 
-  ## Extract unique values for Reader and Modality
-  Readers <- unique(data[[as.character(args$Reader)]])
+  ## Extract unique values for Modality and Reader
   Modalities <- unique(data[[as.character(args$Modality)]])
+  Readers <- unique(data[[as.character(args$Reader)]])
 
-  # Number of readers >= 2 ?
-  if (length(Readers) < 2) {
-    stop("\n Error: The number of readers must be greater than or equal to 2.")
-  }
   # Number of modalities >= 2 ?
   if (length(Modalities) < 2) {
     stop("\n Error: The number of modalities must be greater than or equal to 2.")
+  }
+  # Number of readers >= 2 ?
+  if (length(Readers) < 2) {
+    stop("\n Error: The number of readers must be greater than or equal to 2.")
   }
 
   ##############################################################################
@@ -193,7 +193,7 @@ SensSpec <- function(data, Reader, Modality, Case, D, Y,
   final.result <- list(`Overall Result` = overall_result,
                        `Modality-specific Result` = modality_results,
                        `Reader-specific Modality-specific Result` = reader_results,
-                       digits = digits)
+                       digits = digits, Readers = Readers, Modalities = Modalities)
 
   class(final.result) <- c("SensSpec")
   return(final.result)
