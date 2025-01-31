@@ -8,6 +8,8 @@
 #' @details Print the results for object of class \code{MRMCbinary}.
 #' In the conditional logistic regression results, "Estimate" corresponds to the log odds ratio and "SE" corresponds to the standard error of the log odds ratio.
 #'
+#' @return No return value, called for side effects.
+#'
 #' @examples
 #' ## Load example data
 #' data(VanDyke)

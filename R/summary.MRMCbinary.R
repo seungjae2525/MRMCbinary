@@ -9,6 +9,8 @@
 #' @details Summary the results for object of class \code{MRMCbinary}.
 #' In the conditional logistic regression results, the odds ratio, confidence interval of the odds ratio, and P value are reported.
 #'
+#' @return No return value, called for side effects.
+#'
 #' @examples
 #' ## Load example data
 #' data(VanDyke)

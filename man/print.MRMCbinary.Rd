@@ -11,6 +11,9 @@
 
 \item{...}{Further arguments (currently not used).}
 }
+\value{
+No return value, called for side effects.
+}
 \description{
 Print the results for object of class \code{MRMCbinary}.
 }

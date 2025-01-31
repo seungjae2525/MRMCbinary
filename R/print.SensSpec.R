@@ -7,6 +7,8 @@
 #'
 #' @details Print the results for object of class \code{SensSpec}.
 #'
+#' @return No return value, called for side effects.
+#'
 #' @examples
 #' ## Load example data
 #' data(VanDyke)
