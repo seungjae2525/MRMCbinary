@@ -1,11 +1,10 @@
 # MRMCbinary
 
 <!-- badges: start -->
+[![minimal R version](https://img.shields.io/badge/R-v4.2.0+-blue.svg)](https://cran.r-project.org/)
 [![CRAN status](https://www.r-pkg.org/badges/version/MRMCbinary)](https://CRAN.R-project.org/package=MRMCbinary)
 [![metacran downloads](https://cranlogs.r-pkg.org/badges/grand-total/MRMCbinary)](https://cran.r-project.org/package=MRMCbinary)
 [![Project Status](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active/)
-[![Package version](https://img.shields.io/badge/GitHub-1.0.0-orange.svg)](https://github.com/seungjae2525/MRMCbinary/)
-[![minimal R version](https://img.shields.io/badge/R-v4.2.0+-blue.svg)](https://cran.r-project.org/)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![R-CMD-check](https://github.com/seungjae2525/MRMCbinary/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/seungjae2525/MRMCbinary/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
