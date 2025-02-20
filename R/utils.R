@@ -1,3 +1,5 @@
+`%notin%` <- function(x, y) !(x %in% y)
+
 format_f <- function(xx, numer = NULL, denom = NULL, percentage = FALSE, digits) {
   if (digits < 0) {
     stop("\n Error: digits must be greater than or equal to 0.")
@@ -32,3 +34,6 @@ format_p <- function(xx, digits) {
     return(sprintf(format_string, 1))
   }
 }
+
+
+

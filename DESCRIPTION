@@ -1,12 +1,12 @@
 Package: MRMCbinary
 Title: Multi-Reader Multi-Case Analysis of Binary Diagnostic Tests
-Version: 1.0.4
+Version: 1.0.5
 Description: The goal of 'MRMCbinary' is to compare the performance of diagnostic tests (i.e., sensitivity and specificity) for binary outcomes in multi-reader multi-case (MRMC) studies. It is based on conditional logistic regression and Cochran’s Q test (or McNemar’s test when the number of modalities is equal to 2).
 License: MIT + file LICENSE
 URL: https://github.com/seungjae2525/MRMCbinary
 BugReports: https://github.com/seungjae2525/MRMCbinary/issues
 Depends: R (>= 4.2.0)
-Imports: DescTools, stats, survival
+Imports: DescTools, stats, survival (>= 3.8-1)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2

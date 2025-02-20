@@ -11,6 +11,7 @@ MRMCbinary(
   Case,
   D,
   Y,
+  measure,
   effect,
   interaction = NULL,
   reference.Modality = NULL,
@@ -29,6 +30,8 @@ MRMCbinary(
 \item{D}{Variable of the true disease status. It should be set the value to 1 for cases diseased and to 0 for those non-diseased.}
 
 \item{Y}{Variable of the binary diagnostic test result. It should be set the value to 1 for cases diagnosed as positive and to 0 for those diagnosed as negative.}
+
+\item{measure}{Diagnostic accuracy measure (one of \code{"All"}, \code{"Sensitivity"}, and \code{"Specificity"}).}
 
 \item{effect}{Effect to compare sensitivity and specificity (one of \code{"Modality"}, \code{"Reader"}, and \code{"Both"}). See \bold{Details}.}
 
@@ -56,9 +59,14 @@ An object of class \code{MRMCbinary}. The object is a data.frame with the follow
 \item{n.reader}{Total number of readers.}
 \item{n.case}{Total number of cases.}
 \item{effect}{Effect to compare sensitivity and specificity.}
+\item{measure}{Diagnostic accuracy measure.}
 \item{interaction}{This is only included in the \code{MRMCbinary} object when \code{effect = "Both"}. If one want to evaluate the interaction effect between modality and reader in the conditional logistic regression, \code{interaction = TRUE}, otherwise \code{interaction = FALSE}.}
 \item{reference.Modality}{Reference in variable of the modality identifiers.}
 \item{reference.Reader}{Reference in variable of the reader identifiers.}
+\item{n.diseased}{The number of diseased cases. If \code{measure = "Specificity"}, then n.diseased is NULL.}
+\item{n.nondiseased}{The number of non-diseased cases. If \code{measure = "Sensitivity"}, then n.nondiseased is NULL.}
+\item{n.pos.diseased}{The number of test positive cases among diseased cases. If \code{measure = "Specificity"}, then n.pos.diseased is NULL.}
+\item{n.pos.nondiseased}{The number of test positive cases among non-diseased cases. If \code{measure = "Sensitivity"}, then n.pos.nondiseased is NULL.}
 The results for the \code{MRMCbinary} are printed with the \code{\link[MRMCbinary]{print.MRMCbinary}} function.
 Also, the results for the \code{MRMCbinary} are summarized with the \code{\link[MRMCbinary]{summary.MRMCbinary}} function.
 }
@@ -103,30 +111,30 @@ VanDyke$Y <- as.numeric(VanDyke$rating >= 3)
 ## Example usage of MRMCbinary function:
 # When comparing the sensitivities and specificities between modalities
 modality_result <- MRMCbinary(data = VanDyke, Modality = treatment, Reader = reader,
-                              Case = case, D = truth, Y = Y, effect = "Modality",
-                              interaction = NULL,
+                              Case = case, D = truth, Y = Y, measure = "All",
+                              effect = "Modality", interaction = NULL,
                               reference.Modality = "1", reference.Reader = NULL)
 
 # When comparing the sensitivities and specificities between readers
 reader_result <- MRMCbinary(data = VanDyke, Modality = treatment, Reader = reader,
-                            Case = case, D = truth, Y = Y, effect = "Reader",
-                            interaction = NULL,
+                            Case = case, D = truth, Y = Y, measure = "All",
+                            effect = "Reader", interaction = NULL,
                             reference.Modality = NULL, reference.Reader = "1")
 
 # When comparing the sensitivities and specificities
 #  between modalities and between readers together
 #  not considering interaction between modalities and readers
 both_result_wo_int <- MRMCbinary(data = VanDyke, Modality = treatment, Reader = reader,
-                                 Case = case, D = truth, Y = Y, effect = "Both",
-                                 interaction = FALSE,
+                                 Case = case, D = truth, Y = Y, measure = "All",
+                                 effect = "Both", interaction = FALSE,
                                  reference.Modality = "1", reference.Reader = "1")
 
 # When comparing the sensitivities and specificities
 #  between modalities and between readers together
 #  considering interaction between modalities and readers
 both_result_with_int <- MRMCbinary(data = VanDyke, Modality = treatment, Reader = reader,
-                                   Case = case, D = truth, Y = Y, effect = "Both",
-                                   interaction = TRUE,
+                                   Case = case, D = truth, Y = Y, measure = "All",
+                                   effect = "Both", interaction = TRUE,
                                    reference.Modality = "1", reference.Reader = "1")
 
 }
